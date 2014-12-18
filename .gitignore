@@ -1,0 +1,5 @@
+*.emf
+*.7z
+*.svg
+bin
+lib
