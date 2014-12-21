@@ -58,5 +58,6 @@ public class SetViewportExtEx extends EMFTag {
         // SetWindowExtEx and SetViewportExtEx determine the scaling factor between
         // the window and the viewport.
         renderer.setViewportSize(size);
+        //renderer.resetTransformation();
     }
 }

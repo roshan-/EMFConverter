@@ -50,10 +50,10 @@ public class exportToSVG {
 		SVGGraphics2D g = new SVGGraphics2D(doc);*/		
 		
 		SVGGraphics2D g = buildSVGGraphics2D();
-		
+		renderer.getMapModeTransform();
 //		renderer.setMapMode(EMFConstants.MM_HIENGLISH);
 				
-		g.setSVGCanvasSize(new Dimension(renderer.getSize().width, renderer.getSize().height));
+		g.setSVGCanvasSize(new Dimension((int) renderer.getSize().getWidth(), (int) renderer.getSize().getHeight()));
 		
 		AffineTransform at = renderer.getMapModeTransform();		
 		at.setToTranslation(renderer.getHeader().getBounds().getX(), renderer.getHeader().getBounds().getY());

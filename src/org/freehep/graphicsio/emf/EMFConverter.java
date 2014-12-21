@@ -1,10 +1,14 @@
 // Copyright FreeHEP 2007.
 package org.freehep.graphicsio.emf;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
+import java.util.Properties;
+
 import org.freehep.graphicsbase.util.export.ExportFileType;
 import org.freehep.graphicsio.asf.exportToSVG;
+import org.freehep.graphicsio.svg.SVGGraphics2D;
 
 /**
  * This class converts an EMF image to all available

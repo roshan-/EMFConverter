@@ -29,11 +29,7 @@ public class PolyBezierTo16 extends PolyBezierTo {
         throws IOException {
 
         Rectangle r = emf.readRECTL();
-        int n = emf.readDWORD();      
-      /*  if ((r.getX() == 747) &&
-            	(r.getY() == -211))        	        	
-            		System.out.println("LLEGUE");
-*/
+        int n = emf.readDWORD();            
         Point p [] = emf.readPOINTS(n);
         return new PolyBezierTo16(r, n, p);
     }

@@ -51,6 +51,6 @@ public class SetWindowOrgEx extends EMFTag {
         // The SetWindowOrgEx function specifies which window point maps to
         // the window origin (0,0).
         renderer.setWindowOrigin(point);
-        renderer.resetTransformation();
+        //DIA18renderer.resetTransformation();
     }
 }

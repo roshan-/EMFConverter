@@ -375,7 +375,7 @@ public class XmlWriter implements SVGConstants {
         out.write (TAG_START, 0, 1);    // "<"
         out.write (element.getTagName());
         
-        //DIA 4
+        //DIA18
         if ((element.getTagName().equals("g")) && (primeraG == true))
         {
         	        	
@@ -403,11 +403,11 @@ public class XmlWriter implements SVGConstants {
                 out.write(' ');
           //      System.out.println("*********" + element.getTagName() + " " + attr.getName() + " " + attr.getValue());
                 
-                if (element.getTagName().equals("image") && (attr.getName().equals("style")))
+         /*       if (element.getTagName().equals("image") && (attr.getName().equals("style")))
                 	System.out.println("PILLADO");
                 else if (element.getTagName().equals("path") && (attr.getName().equals("stroke")))
                 	System.out.println("CARGATELO");
-                else
+                else*/
                 	writeXml(attr, out, escaped);
                 
             	

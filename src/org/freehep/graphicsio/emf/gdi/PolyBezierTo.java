@@ -49,21 +49,7 @@ public class PolyBezierTo extends AbstractPolygon {
         GeneralPath currentFigure = renderer.getFigure();
         boolean nodraw = false;
         
-        /*if (numberOfPoints > 0)
-        {
-        	
-        	if ((points[0].x == 2257) && (points[0].y == -621))
-        		nodraw = true;
-        	else if ((points[0].x == 1040) && (points[0].y == -2145))
-        		nodraw = true;
-        	else if ((points[0].x == 1150) && (points[0].y == -2085))
-        		nodraw = true;
-        	else if ((points[0].x == 2257) && (points[0].y == -621))
-        		nodraw = true;
-        	
-        	if (getBounds().getWidth() < 20)
-        		nodraw = true;
-        }*/
+        
         if (nodraw == false) {
         if (points != null && points.length > 0) {
 
@@ -78,8 +64,9 @@ public class PolyBezierTo extends AbstractPolygon {
                     (float)p2.getX(), (float)p2.getY(),
                     (float)p3.getX(), (float)p3.getY());                
             }
-            currentFigure.lineTo(points[points.length-1].getX(),
+/*            currentFigure.lineTo(points[points.length-1].getX(),
             		points[points.length-1].getY());
+            		*/
             		
         }
         }
