@@ -6,6 +6,7 @@ import org.freehep.graphicsio.emf.EMFRenderer;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 
 /**
@@ -102,12 +103,30 @@ public abstract class AbstractPolyPolygon extends EMFTag {
             // close the member, add it to path
             if (closePath) {
                 gp.closePath();
-            }
-
-            path.append(gp, false);
+            }            
+            path.append(gp, false);            
         }
-
+        
+        
+      /*DIA25/*/
+        
+    /*     AffineTransform at = new AffineTransform ();
+        
+        double h = bounds.getHeight();
+        double w = bounds.getWidth();
+        
+       // at.translate(bounds.getX(), bounds.getY());
+        //renderer.setTranslate(at);
+        
+        double scaleX = path.getBounds2D().getWidth()/w;
+        double scaleY = path.getBounds2D().getHeight()/h;
+        at.scale(scaleX, scaleY);
+        renderer.setTransform(at);
+        
         // draw the complete path
+         System.out.println("MMX: " + path.getBounds2D().getMinX() + " MMY: " + path.getBounds2D().getMinY());
+         System.out.println("MMX: " + path.getBounds2D().getMaxX() + " MMY: " + path.getBounds2D().getMaxY());
+         */
         if (closePath) {
             renderer.fillAndDrawOrAppend(path);
         } else {

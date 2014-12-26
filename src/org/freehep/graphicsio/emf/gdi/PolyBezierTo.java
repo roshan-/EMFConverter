@@ -3,6 +3,7 @@ package org.freehep.graphicsio.emf.gdi;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.io.IOException;
 
@@ -17,25 +18,28 @@ import org.freehep.graphicsio.emf.EMFRenderer;
  * @version $Id: freehep-graphicsio-emf/src/main/java/org/freehep/graphicsio/emf/gdi/PolyBezierTo.java c0f15e7696d3 2007/01/22 19:26:48 duns $
  */
 public class PolyBezierTo extends AbstractPolygon {
-
+	private Rectangle bounds;
+	
     public PolyBezierTo() {
         super(5, 1, null, 0, null);
     }
 
     public PolyBezierTo(Rectangle bounds, int numberOfPoints, Point[] points) {
         super(5, 1, bounds, numberOfPoints, points);
+        this.bounds = bounds;
     }
 
     protected PolyBezierTo (int id, int version, Rectangle bounds, int numberOfPoints, Point[] points) {
         super(id, version, bounds, numberOfPoints, points);
+        this.bounds = bounds;
     }
 
     public EMFTag read(int tagID, EMFInputStream emf, int len)
             throws IOException {
 
-        Rectangle r = emf.readRECTL();
+    	bounds = emf.readRECTL();
         int n = emf.readDWORD();
-        return new PolyBezierTo(r, n, emf.readPOINTL(n));
+        return new PolyBezierTo(bounds, n, emf.readPOINTL(n));
     }
 
     /**
@@ -69,6 +73,25 @@ public class PolyBezierTo extends AbstractPolygon {
             		*/
             		
         }
+        /*AffineTransform at = new AffineTransform ();
+        
+        double h = bounds.getHeight();
+        double w = bounds.getWidth();
+        
+       // at.translate(bounds.getX(), bounds.getY());
+        //renderer.setTranslate(at);
+        
+        double scaleX = currentFigure.getBounds2D().getWidth()/w;
+        double scaleY = currentFigure.getBounds2D().getHeight()/h;
+        at.scale(scaleX, scaleY);
+        renderer.setTransform(at);*/      
+        
+      /*  renderer.resetTransformation();
+        AffineTransform at = new AffineTransform ();	
+        currentFigure.getBounds2D();
+        renderer.setTranslate(at);*/
+        
+        
         }
     }
 }

@@ -61,7 +61,7 @@ public class EMF2SVG extends EMFConverter {
     	            	
     	//export(ImageConstants.SVG, "Infographics.emf", "Infographics.svg");
         
-        boolean all = false;
+        boolean all = true;
     	if (all == true)
     	{
     	export(ImageConstants.SVG, "images/13.emf", "images/13.emf.svg");
@@ -119,10 +119,14 @@ public class EMF2SVG extends EMFConverter {
     	export(ImageConstants.SVG, "images/picture337.emf", "images/picture337.emf.svg");
     	export(ImageConstants.SVG, "images/picture340.emf", "images/picture340.emf.svg");
     	export(ImageConstants.SVG, "images/shpLogo.emf", "images/shpLogo.emf.svg");
+    	export(ImageConstants.SVG, "images/shpLogo1.emf", "images/shpLogo1.emf.svg");
     	}
     	else
     	{
-    	export(ImageConstants.SVG, "images/landscape.emf", "images/landscape.emf.svg");
+    		//export(ImageConstants.SVG, "images/13.emf", "images/13.emf.svg");
+        	export(ImageConstants.SVG, "images/shpLogo.emf", "images/shpLogo.emf.svg");
+        	export(ImageConstants.SVG, "images/landscape.emf", "images/landscape.emf.svg");
+        	//export(ImageConstants.SVG, "images/24.emf", "images/24.emf.svg");
     	}
     	
     	//export(ImageConstants.SVG, "images/picture333.emf", "images/picture333.emf.svg");

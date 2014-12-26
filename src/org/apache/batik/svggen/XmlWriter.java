@@ -376,7 +376,7 @@ public class XmlWriter implements SVGConstants {
         out.write (element.getTagName());
         
         //DIA18
-        if ((element.getTagName().equals("g")) && (primeraG == true))
+        /*if ((element.getTagName().equals("g")) && (primeraG == true))
         {
         	        	
         	primeraG = false;
@@ -385,16 +385,25 @@ public class XmlWriter implements SVGConstants {
         if (element.getTagName().equals("svg")) 
         {
         	primeraG = true;
-        	vb = element.getAttributeNS(null,SVGConstants.SVG_VIEW_BOX_ATTRIBUTE);
+        	/*vb = element.getAttributeNS(null,SVGConstants.SVG_VIEW_BOX_ATTRIBUTE);        	
         	String vals[] =vb.substring(1, vb.length()).split(",");
-        	despX = -3*Float.valueOf(vals[0]);
-        	despY = -3*Float.valueOf(vals[1]);        	        	
-        }
+        	*/
+        	
+        	
+        /*	vb = element.getAttribute("translateAll");
+        	if (vb != null)
+        	{
+        		String vals[] =vb.substring(1, vb.length()).split(",");
+        		despX = Float.parseFloat(vals[0]);
+        		despY = Float.parseFloat(vals[1]);            	
+        	}
+        	
+        }*/
         //out.write (EOL); //FIXME ASF
         
         String txt = element.getAttributeNS(null, SVG_TRANSFORM_ATTRIBUTE);
-        //System.out.println(txt);
-        /*out.write(' ' + "transform=\"" +txt + "\"");*/
+  //      System.out.println("TTTT" + txt);
+      //  out.write(' ' + "transform=\"" +txt + "\"");
         NamedNodeMap attributes = element.getAttributes();
         if (attributes != null){
             int nAttr = attributes.getLength();

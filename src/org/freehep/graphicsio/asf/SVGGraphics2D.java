@@ -167,7 +167,24 @@ public class SVGGraphics2D extends AbstractGraphics2D
      */
     protected Graphics2D fmg;
 
-    {
+    private double scaleX = 1.0f, scaleY=1.0f;
+    public double getScaleX() {
+		return scaleX;
+	}
+
+	public void setScaleX(double scaleX) {
+		this.scaleX = scaleX;
+	}
+
+	public double getScaleY() {
+		return scaleY;
+	}
+
+	public void setScaleY(double scaleY) {
+		this.scaleY = scaleY;
+	}
+
+	{
         BufferedImage bi
             = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 
@@ -566,13 +583,21 @@ public class SVGGraphics2D extends AbstractGraphics2D
                                        XMLNS_PREFIX + ":" + XLINK_PREFIX,
                                        XLINK_NAMESPACE_URI);
                 
-                //DIA4
-                String str = "[" + this.getTransform().getTranslateX() + "," +
+                //DIA4                 
+/*                String str = "[" + this.getTransform().getTranslateX() + "," +
                 					this.getTransform().getTranslateY() + "," +
-                				this.getSVGCanvasSize().getWidth() + "," +
-                				this.getSVGCanvasSize().getHeight() + "]";
+                				this.getSVGCanvasSize().getWidth() +"," +
+                				this.getSVGCanvasSize().getHeight()+ "]";
+*/
+                String str = "[" + "0.0"+ "," +
+                		"0.0" + "," +
+                				this.getSVGCanvasSize().getWidth() +"," +
+                				this.getSVGCanvasSize().getHeight()+ "]";
                 svgRoot.setAttributeNS(null, SVGConstants.SVG_VIEW_BOX_ATTRIBUTE, str);
-                
+               
+                //DIA21
+                //svgRoot.setAttribute("translateAll", this.getSVGCanvasSize().getWidth() /scaleX + "," + this.getSVGCanvasSize().getWidth()/scaleY);
+                //svgRoot.setAttribute("translateAll", -this.getTransform().getTranslateX() /scaleX + "," + -this.getTransform().getTranslateY()/scaleY);
                 
                 DocumentFragment svgDocument =
                     svgRoot.getOwnerDocument().createDocumentFragment();

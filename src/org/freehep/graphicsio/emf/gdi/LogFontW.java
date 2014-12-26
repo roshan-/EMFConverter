@@ -88,7 +88,8 @@ public class LogFontW implements EMFConstants, GDIObject {
     }
 
     public LogFontW(EMFInputStream emf) throws IOException {
-        height = emf.readLONG();
+        //DIA21 Mult por 0.7
+    	height = (int) (emf.readLONG()*0.75);
         width = emf.readLONG();
         escapement = emf.readLONG();
         orientation = emf.readLONG();

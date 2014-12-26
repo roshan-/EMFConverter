@@ -49,15 +49,29 @@ public class exportToSVG {
 		
 		SVGGraphics2D g = new SVGGraphics2D(doc);*/		
 		
-		SVGGraphics2D g = buildSVGGraphics2D();
+		SVGGraphics2D g = buildSVGGraphics2D();		
 		renderer.getMapModeTransform();
 //		renderer.setMapMode(EMFConstants.MM_HIENGLISH);
-				
-		g.setSVGCanvasSize(new Dimension((int) renderer.getSize().getWidth(), (int) renderer.getSize().getHeight()));
 		
-		AffineTransform at = renderer.getMapModeTransform();		
+		//g.setSVGCanvasSize(new Dimension((int) (renderer.getSize().getWidth()/renderer.getScaleX()), (int) (renderer.getSize().getHeight()/renderer.getScaleX())));
+		
+		g.setSVGCanvasSize(new Dimension((int) (renderer.getSize().getWidth()), (int) (renderer.getSize().getHeight())));
+		
+		renderer.getViewportOrigin();
+		/*AffineTransform at = new AffineTransform(1.0,//1/renderer.getScaleX(), 
+		                                          0, 
+		                                          -renderer.getHeader().getBounds().getX(),
+		                                          0,
+		                                          -1.0,// -1/renderer.getScaleY(),
+		                                           -renderer.getHeader().getBounds().getY());*/
+		AffineTransform at = new AffineTransform();
+		at.translate(-renderer.getHeader().getBounds().getX(), -renderer.getHeader().getBounds().getY());
+		/*AffineTransform at = renderer.getMapModeTransform();		
 		at.setToTranslation(renderer.getHeader().getBounds().getX(), renderer.getHeader().getBounds().getY());
-		g.setTransform(at);				
+		*/
+		g.setTransform(at);
+		renderer.setInitialTransform(at);
+		
 		renderer.paint(g);
 		
 		

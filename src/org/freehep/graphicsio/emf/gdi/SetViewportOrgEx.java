@@ -58,6 +58,10 @@ public class SetViewportOrgEx extends EMFTag {
         // effect of shifting the axes so that the logical point (0,0) no longer
         // refers to the upper-left corner.
         renderer.setViewportOrigin(point);
+      //  renderer.resetTransformation();
         //DIA18 renderer.resetTransformation();
+        //DIA21 comm resetTransformation();
+      //  renderer.resetTransformation();
+
     }
 }

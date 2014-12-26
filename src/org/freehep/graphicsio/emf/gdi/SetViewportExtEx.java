@@ -57,7 +57,10 @@ public class SetViewportExtEx extends EMFTag {
         // coordinates (or pixels). When mapping between page space and device space,
         // SetWindowExtEx and SetViewportExtEx determine the scaling factor between
         // the window and the viewport.
-        renderer.setViewportSize(size);
-        //renderer.resetTransformation();
+        renderer.setViewportSize(size);        
+        renderer.resetTransformation();
+        //DIA21 comm resetTransformation();
+//        renderer.resetTransformation();
+
     }
 }

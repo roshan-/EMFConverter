@@ -576,6 +576,8 @@ public class SVGGraphics2D extends AbstractGraphics2D
             svgRoot.setAttributeNS(null, SVG_WIDTH_ATTRIBUTE,  String.valueOf( svgCanvasSize.width ) );
             svgRoot.setAttributeNS(null, SVG_HEIGHT_ATTRIBUTE, String.valueOf( svgCanvasSize.height) );
         }
+        svgRoot.setAttributeNS(null, SVG_SCALE_ATTRIBUTE, "[" + String.valueOf(gc.getTransform().getScaleX())+ "," + String.valueOf(gc.getTransform().getScaleY()) + "]");
+        svgRoot.setAttributeNS(null, SVG_TRANSFORM_ATTRIBUTE, "translate(" + gc.getTransform().getTranslateX() + "," + String.valueOf(gc.getTransform().getTranslateY()+")"));
         return svgRoot;
     }
 

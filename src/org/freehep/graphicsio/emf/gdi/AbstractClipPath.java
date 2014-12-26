@@ -59,9 +59,7 @@ public abstract class AbstractClipPath extends EMFTag {
                 renderer.setClip(renderer.getInitialClip());
                 renderer.setTransform(at);
                 renderer.clip(shape);
-                */
-                
-                renderer.setClip(shape);
+                */                             
             }
             // The new clipping region includes the areas of the
             // current clipping region with those of the current shape excluded.

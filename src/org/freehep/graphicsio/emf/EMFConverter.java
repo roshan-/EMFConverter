@@ -79,7 +79,7 @@ public class EMFConverter {
 */
             EMFPanel emfPanel = new EMFPanel();
             emfPanel.setRenderer(emfRenderer);
-                        
+  
 /*
             // TODO why uses this classes components?!
             
@@ -95,7 +95,7 @@ public class EMFConverter {
             prop.setProperty("size-w", "1012");
             prop.setProperty("size-h", "958");
     		*/
-      /*     Properties p = new Properties();
+       /*   Properties p = new Properties();
             p.put(SVGGraphics2D.EMBED_FONTS, Boolean.toString(false));
             p.put(SVGGraphics2D.CLIP, Boolean.toString(true));
             p.put(SVGGraphics2D.COMPRESS, Boolean.toString(false));
@@ -105,14 +105,13 @@ public class EMFConverter {
     		
            
             exportFileType.exportToFile(
-               new File("OLD" + destFileName),
+               new File(destFileName +"_1"),
                emfPanel,
                emfPanel,
                p,
-               "Na");
+               "Na");*/
            
-            */
-            exportToSVG ex = new exportToSVG(emfRenderer, destFileName);
+                        exportToSVG ex = new exportToSVG(emfRenderer, destFileName);
         } catch (Exception e) {
             e.printStackTrace();
         }

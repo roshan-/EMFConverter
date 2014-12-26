@@ -3,12 +3,13 @@ package org.freehep.graphicsio.emf.gdi;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.io.IOException;
 
 import org.freehep.graphicsio.emf.EMFInputStream;
-import org.freehep.graphicsio.emf.EMFTag;
 import org.freehep.graphicsio.emf.EMFRenderer;
+import org.freehep.graphicsio.emf.EMFTag;
 
 /**
  * PolylineTo TAG.
@@ -56,5 +57,9 @@ public class PolylineTo extends AbstractPolygon {
                     (float) points[point].getY());
             }
         }
+      /*  AffineTransform at = new AffineTransform ();	
+        currentFigure.getBounds2D();
+        renderer.setTranslate(at);
+        renderer.resetTransformation();*/
     }
 }

@@ -53,8 +53,9 @@ public class SetMapMode extends EMFTag implements EMFConstants {
         // units with arbitrarily scaled axes. Use the SetWindowExtEx
         // and SetViewportExtEx functions to specify the units,
         // orientation, and scaling.
+    	renderer.setMapMode(mode);
         if (mode == EMFConstants.MM_ANISOTROPIC) {
-            renderer.setMapModeIsotropic(false);
+            renderer.setMapMode(EMFConstants.MM_ANISOTROPIC);
         }
 
         // MM_HIENGLISH 	Each logical unit is mapped to 0.001 inch.
@@ -84,7 +85,7 @@ public class SetMapMode extends EMFTag implements EMFConstants {
         // the same size (When the window extent is set, the viewport will
         // be adjusted to keep the units isotropic).
         else if (mode == EMFConstants.MM_ISOTROPIC) {
-            renderer.setMapModeIsotropic(true);
+            renderer.setMapMode(EMFConstants.MM_ISOTROPIC);
             renderer.fixViewportSize();
         }
 

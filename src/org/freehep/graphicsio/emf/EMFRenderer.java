@@ -24,6 +24,7 @@ import java.util.Stack;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.freehep.graphicsio.asf.SVGGraphics2D;
 import org.freehep.graphicsio.emf.gdi.GDIObject;
 import org.freehep.util.io.Tag;
 
@@ -69,7 +70,11 @@ public class EMFRenderer {
      */
     private Point viewportOrigin = null;
 
-    /**
+    public Dimension getViewportSize() {
+		return viewportSize;
+	}
+
+	/**
      * size of the emf window, set by SetWindowExtEx
      */
     private Dimension windowSize = null;
@@ -84,7 +89,7 @@ public class EMFRenderer {
      *  The MM_ANISOTROPIC mode allows the x-coordinates
      * and y-coordinates to be adjusted independently.
      */
-    private boolean mapModeIsotropic = false;
+    //private boolean mapModeIsotropic = false;
 
     public int getMapMode() {
 		return mapMode;
@@ -95,9 +100,10 @@ public class EMFRenderer {
      * resizing the emf to propper device bounds.
      */
     private AffineTransform  mapModeTransform =
-        AffineTransform.getScaleInstance(TWIP_SCALE, TWIP_SCALE);
+        //DIA21 AffineTransform.getScaleInstance(TWIP_SCALE, TWIP_SCALE);
+    		AffineTransform.getScaleInstance(1.0f, 1.0f);
 
-    private int mapMode = EMFConstants.MM_TEXT; //DIA14 MM_ISOTROPIC;
+    private int mapMode = EMFConstants.MM_ISOTROPIC; //DIA21EMFConstants.MM_TEXT; //DIA14 MM_ISOTROPIC;
 
     /**
      * clipping area which is the base for all rendering
@@ -125,6 +131,11 @@ public class EMFRenderer {
 
     private int textAlignMode = 0;
 
+    private double scaleX = 1.0f;
+    private double scaleY = 1.0f;
+    
+    private double minX = Double.MAX_VALUE, minY = Double.MAX_VALUE;
+        
     /**
      * color for simple text rendering
      */
@@ -267,6 +278,9 @@ public class EMFRenderer {
             (int)Math.ceil(bounds.height * TWIP_SCALE));*/
     }
 
+    public void setInitialTransform(AffineTransform at) {
+    	initialTransform = at;
+    }
     /**
      * Paints the EMF onto the provided graphics context.
      *
@@ -298,6 +312,7 @@ public class EMFRenderer {
             RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         // used by SetWorldTransform to reset transformation
+        if (initialTransform == null)
         initialTransform = g2.getTransform();
 
         // set the initial value, defaults for EMF
@@ -332,19 +347,14 @@ public class EMFRenderer {
         for (int i = 0; i < tags.size(); i++) {
             tag = tags.get(i);     
             if (tag instanceof EMFTag) {
-            	System.out.println(i + "-" + tags.get(i).getName());
+            	System.out.println(i + "-" + tags.get(i).getName() + "!!!!!!!!!!!!");
                 ((EMFTag) tags.get(i)).render(this);
             } else {
                 logger.warning("unknown tag: " + tag);
-            }
-       /*     if (i==285)
-            		i = 288;
-            if (i==290)
-            	i = 292;
-           */ 
-        //    view.setImageToDraw(g2);
+            }    
         }
-
+        
+        g2.getClipBounds();
         // reset Transform and clip
         g2.setRenderingHints(hints);
         g2.setTransform(at);
@@ -355,7 +365,11 @@ public class EMFRenderer {
     //            complex drawing methods for EMFTags
     // ---------------------------------------------------------------------
 
-    /**
+    public Point getViewportOrigin() {
+		return viewportOrigin;
+	}
+
+	/**
      * set the initial transform, the windowOrigin and viewportOrigin,
      * scales by viewportSize and windowSize
      * @param g2 Context to apply transformations
@@ -373,7 +387,7 @@ public class EMFRenderer {
             g2.transform(mapModeTransform);
         }*/
         if (mapModeTransform != null) {
-            g2.transform(mapModeTransform);
+            g2.setTransform(mapModeTransform);
         }
 
         // move to window origin
@@ -391,16 +405,35 @@ public class EMFRenderer {
 
         // TWIP_SCALE by window and viewport size
         if (viewportSize != null && windowSize != null) {
-            double scaleX =
+            scaleX =
                 viewportSize.getWidth() /
                 windowSize.getWidth();
-            double scaleY =
+            scaleY =
                 viewportSize.getHeight() /
                 windowSize.getHeight();
+       //     initialTransform = new AffineTransform ();
+            
+            //initialTransform.scale(scaleX, scaleY);
+       /*     double tx = 0.0;
+            double ty = -this.getSize().getHeight();
+            initialTransform.translate(tx, ty);*/
+          //  g2.setTransform(initialTransform);
+           
+          //  g2.translate(this.getSize().getWidth() / scaleX, this.getSize().getHeight() / scaleY);
+          //g2.translate(this.getSize().getWidth(), -this.getSize().getHeight());
+          //g2.translate(1.0, -this.getSize().getHeight());
+
             g2.scale(scaleX,  scaleY);
+          
+          /*  ((SVGGraphics2D) g2).setSVGCanvasSize(new Dimension((int)(this.getSize().getWidth() / scaleX), 
+            									  (int)(this.getSize().getHeight() / scaleY)));
+            									  */            
+            //((SVGGraphics2D) g2).setScaleX(scaleX);
+            //((SVGGraphics2D) g2).setScaleY(scaleY);
         }
     }
 
+  
     /**
      * Stores the current state. Used by
      * {@link org.freehep.graphicsio.emf.gdi.SaveDC}
@@ -475,13 +508,15 @@ public class EMFRenderer {
      * to keep the units isotropic).
      */
     public void fixViewportSize() {
-        if (mapModeIsotropic && (windowSize != null && viewportSize != null)) {
+        if ( mapMode == EMFConstants.MM_ISOTROPIC && (windowSize != null && viewportSize != null)) {
             viewportSize.setSize(
                 viewportSize.getWidth(),
                 viewportSize.getWidth() *
                     (windowSize.getHeight() / windowSize.getWidth())
             );
         }
+        ((SVGGraphics2D) g2).setScaleX(scaleX);
+        ((SVGGraphics2D) g2).setScaleY(scaleY);
     }
 
     /**
@@ -512,6 +547,11 @@ public class EMFRenderer {
                 fillShape(g2, s);
             }
             drawShape(g2, s);
+            if (s.getBounds().getX() < minX)
+            	minX =s.getBounds().getX();            
+            if (s.getBounds().getY() < minY)
+               	minY =s.getBounds().getY();
+         System.out.println("LL" + minX + "." + minY);
         }
     }
 
@@ -647,6 +687,7 @@ public class EMFRenderer {
             layout.draw(g2, (float) x, (float) y);
         }*/
 
+    	y -= 0.125 * g2.getFont().getSize();
     	if (path != null) {
     		// do not use g2.drawString(str, x, y) to be aware of path
     		TextLayout tl = new TextLayout(
@@ -878,6 +919,7 @@ public class EMFRenderer {
 
     public void setFont(Font font) {
         g2.setFont(font);
+        
     }
 
     public AffineTransform getTransform() {
@@ -886,7 +928,7 @@ public class EMFRenderer {
 
     public void transform(AffineTransform transform) {
         g2.transform(transform);
-        g2.setTransform(transform);
+        //DIA25 g2.setTransform(transform);
     }
 
     public void resetTransformation() {
@@ -896,6 +938,14 @@ public class EMFRenderer {
     public void setTransform(AffineTransform at) {
         g2.setTransform(at);
     }
+    
+    public void setTranslate(AffineTransform at) {
+        AffineTransform old = g2.getTransform();
+        System.out.println("# " +old.getScaleX() +" "+old.getScaleY());
+        at.scale(old.getScaleX(), old.getScaleY());
+    	g2.setTransform(at);
+    }
+
 
     public void setClip(Shape shape) {
         g2.setClip(shape);
@@ -973,9 +1023,7 @@ public class EMFRenderer {
         this.windingRule = windingRule;
     }
 
-    public void setMapModeIsotropic(boolean mapModeIsotropic) {
-        this.mapModeIsotropic = mapModeIsotropic;
-    }
+
 
     public AffineTransform getMapModeTransform() {
         return mapModeTransform;
@@ -1006,12 +1054,10 @@ public class EMFRenderer {
     	case EMFConstants.MM_TWIPS:
     		mapModeTransform = AffineTransform.getScaleInstance(TWIP_SCALE, TWIP_SCALE);
     		break;
-    	case EMFConstants.MM_ISOTROPIC:
-    		mapModeIsotropic = true;
-    		mapModeTransform = null;
+    	case EMFConstants.MM_ISOTROPIC:    		
+    		mapModeTransform = AffineTransform.getScaleInstance(1.0d, 1.0d);;
     		break;
-    	case EMFConstants.MM_ANISOTROPIC:
-    		mapModeIsotropic = false;
+    	case EMFConstants.MM_ANISOTROPIC:    		
     		mapModeTransform = null;
     		break;    		    	
     	}
@@ -1028,14 +1074,23 @@ public class EMFRenderer {
 
     public void setViewportSize(Dimension viewportSize) {
         this.viewportSize = viewportSize;
-        fixViewportSize();
+        fixViewportSize();        
+    	/*((SVGGraphics2D) g2).setSVGCanvasSize(new Dimension((int) (viewportSize.getWidth()),
+    				 (int) (viewportSize.getHeight())));
+        */
+        
+        //DIA21 comm resetTransformation();
         //resetTransformation();
     }
 
     public void setWindowSize(Dimension windowSize) {
         this.windowSize = windowSize;
         fixViewportSize();
+     	/*((SVGGraphics2D) g2).setSVGCanvasSize(new Dimension((int) (windowSize.getWidth()),
+				 (int) (windowSize.getHeight())));*/
+        //DIA21 comm resetTransformation();
         //resetTransformation();
+
     }
 
     public GDIObject getGDIObject(int index) {
@@ -1117,4 +1172,22 @@ public class EMFRenderer {
     public EMFHeader getHeader() {
     	return header;
     }
+
+	public double getScaleX() {
+		return scaleX;
+	}
+
+	public void setScaleX(double scaleX) {
+		this.scaleX = scaleX;
+	}
+
+	public double getScaleY() {
+		return scaleY;
+	}
+
+	public void setScaleY(double scaleY) {
+		this.scaleY = scaleY;
+	}
+    
+    
 }
