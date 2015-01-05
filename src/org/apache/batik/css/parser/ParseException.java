@@ -33,6 +33,11 @@ package org.apache.batik.css.parser;
 public class ParseException extends RuntimeException {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7194494256968828516L;
+
+	/**
      * @serial The embedded exception if tunnelling, or null.
      */    
     protected Exception exception;

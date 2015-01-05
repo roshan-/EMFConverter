@@ -1,14 +1,25 @@
 // Copyright FreeHEP 2007.
 package org.freehep.graphicsio.emf;
 
-import java.io.File;
+import java.awt.Dimension;
+import java.awt.geom.AffineTransform;
+import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.util.List;
-import java.util.Properties;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 
-import org.freehep.graphicsbase.util.export.ExportFileType;
-import org.freehep.graphicsio.asf.exportToSVG;
-import org.freehep.graphicsio.svg.SVGGraphics2D;
+import org.apache.batik.dom.GenericDOMImplementation;
+import org.apache.batik.svggen.SVGGeneratorContext;
+import org.apache.batik.svggen.SVGGeneratorContext.GraphicContextDefaults;
+import org.apache.batik.svggen.SVGGraphics2DIOException;
+import org.apache.batik.util.SVGConstants;
+import org.freehep.graphicsio.asf.SVGGraphics2D;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
 
 /**
  * This class converts an EMF image to all available
@@ -27,112 +38,71 @@ public class EMFConverter {
      * @param srcFileName emf file to read
      * @param destFileName file to create, if null srcFileName
      *        is used with the extension type
+     * @throws FileNotFoundException 
      */
-    protected static void export(String type, String srcFileName, String destFileName) {
+    protected static void export(String type, String srcFileName, String destFileName) throws FileNotFoundException {
+    	export (type, new BufferedInputStream(new FileInputStream(srcFileName)), destFileName);
+    }
+    
+	 protected static SVGGraphics2D buildSVGGraphics2D() {
+	        // CSSDocumentHandler.setParserClassName(CSS_PARSER_CLASS_NAME);
+	        DOMImplementation impl = GenericDOMImplementation.getDOMImplementation();
+	        String namespaceURI = SVGConstants.SVG_NAMESPACE_URI;
+	        Document domFactory = impl.createDocument(namespaceURI,"svg", null);
+	        SVGGeneratorContext ctx = SVGGeneratorContext.createDefault(domFactory);
+	        GraphicContextDefaults defaults
+	            = new GraphicContextDefaults();
+	        //09.12 ASF defaults.setFont(new Font("Arial", Font.PLAIN, 12));	        
+	        ctx.setGraphicContextDefaults(defaults);
+	        ctx.setPrecision(12);
+	        
+	        return new SVGGraphics2D(ctx, false);
+	    }
+	 
+	public static void exportToSVG(EMFRenderer renderer, String destFileName) {
+		SVGGraphics2D g = buildSVGGraphics2D();		
+		renderer.getMapModeTransform();
+		renderer.getViewportOrigin();
+		AffineTransform at = new AffineTransform();
+		at.translate(-renderer.getHeader().getBounds().getX(), -renderer.getHeader().getBounds().getY());
+		g.setTransform(at);
+		renderer.setInitialTransform(at);
+		
+		renderer.paint(g);
+		g.setSVGCanvasSize(new Dimension((int) (renderer.getSize().getWidth()), (int) (renderer.getSize().getHeight())));
+		
+			
+		Writer out = null;
+		try {
+			OutputStream s = 
+					new FileOutputStream(destFileName);
+			out = new OutputStreamWriter(s, "UTF-8");
+
+		} catch (UnsupportedEncodingException use) {
+			use.printStackTrace();
+		} catch (FileNotFoundException fnfe) {
+			fnfe.printStackTrace();
+		}
+	
+		try {
+			boolean useCSS = true;	//FIXME ASF true antes
+			g.stream(out,useCSS);		 
+		} catch (SVGGraphics2DIOException sioe) {
+			sioe.printStackTrace();
+		}
+	}
+
+    protected static void export(String type, BufferedInputStream in, String destFileName) {
         try {
-            List<?> exportFileTypes = ExportFileType.getExportFileTypes(type);
-            if (exportFileTypes == null || exportFileTypes.size() == 0) {
-                System.out.println(
-                    type + " library is not available. check your classpath!");
-                return;
-            }
-
-            ExportFileType exportFileType = (ExportFileType) exportFileTypes.get(0);
-
             // read the EMF file
             EMFRenderer emfRenderer = new EMFRenderer(
-                new EMFInputStream(
-                    new FileInputStream(srcFileName)));
+                new EMFInputStream(in));
 
-            // create the destFileName,
-            // replace or add the extension to the destFileName
-            if (destFileName == null || destFileName.length() == 0) {
-                // index of the beginning of the extension
-                int lastPointIndex = srcFileName.lastIndexOf(".");
-
-                // to be sure that the point separates an extension
-                // and is not part of a directory name
-                int lastSeparator1Index = srcFileName.lastIndexOf("/");
-                int lastSeparator2Index = srcFileName.lastIndexOf("\\");
-
-                if (lastSeparator1Index > lastPointIndex ||
-                    lastSeparator2Index > lastPointIndex) {
-                    destFileName = srcFileName + ".";
-                } else if (lastPointIndex > -1) {
-                    destFileName = srcFileName.substring(
-                        0, lastPointIndex + 1);
-                }
-
-                // add the extension
-                destFileName += type.toLowerCase();
-            }
-
-            // TODO there is no possibility to use Constants of base class!
-           //  create SVG properties 
-        /*    Properties p = new Properties();
-            p.put(SVGGraphics2D.EMBED_FONTS, Boolean.toString(false));
-            p.put(SVGGraphics2D.CLIP, Boolean.toString(true));
-            p.put(SVGGraphics2D.COMPRESS, Boolean.toString(false));
-            p.put(SVGGraphics2D.TEXT_AS_SHAPES, Boolean.toString(false));
-            p.put(SVGGraphics2D.FOR, "Freehep EMF2SVG");
-            p.put(SVGGraphics2D.TITLE, destFileName);
-*/
             EMFPanel emfPanel = new EMFPanel();
             emfPanel.setRenderer(emfRenderer);
-  
-/*
-            // TODO why uses this classes components?!
-            
-            //FIXME Antes no se definian PROPS
-            exportFileType.exportToFile(
-                    new File(destFileName),
-                    emfPanel,
-                    emfPanel,
-                    null,
-                    "Freehep EMF converter");*/
-           
-          /*  Properties prop = new Properties ();
-            prop.setProperty("size-w", "1012");
-            prop.setProperty("size-h", "958");
-    		*/
-       /*   Properties p = new Properties();
-            p.put(SVGGraphics2D.EMBED_FONTS, Boolean.toString(false));
-            p.put(SVGGraphics2D.CLIP, Boolean.toString(true));
-            p.put(SVGGraphics2D.COMPRESS, Boolean.toString(false));
-            p.put(SVGGraphics2D.TEXT_AS_SHAPES, Boolean.toString(false));
-            p.put(SVGGraphics2D.FOR, "Freehep EMF2SVG");
-            p.put(SVGGraphics2D.TITLE, srcFileName);
-    		
-           
-            exportFileType.exportToFile(
-               new File(destFileName +"_1"),
-               emfPanel,
-               emfPanel,
-               p,
-               "Na");*/
-           
-                        exportToSVG ex = new exportToSVG(emfRenderer, destFileName);
+            exportToSVG(emfRenderer, destFileName);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    /**
-     * starts the conversion
-     *
-     * @param args args[0] source file, args[1] destination
-     *        file with target format in extension
-     */
-    public static void main(String[] args) {
-        try {
-            export(
-                args[1].substring(args[1].lastIndexOf(".") + 1),
-                args[0],
-                args[1]);
-        } catch (Exception e) {
-            System.out.println("usage: EMFConverter imput.emf output.extension");
-        }
-    }
-    
-    
 }

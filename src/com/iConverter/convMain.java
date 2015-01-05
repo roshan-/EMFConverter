@@ -23,7 +23,6 @@ public class convMain extends EMFConverter{
 		for (File f :  new File(inDir).listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				// TODO Auto-generated method stub
 				return name.endsWith(".emf");
 			}
 		})) {
@@ -35,7 +34,6 @@ public class convMain extends EMFConverter{
 		html.write("</body>\n</html>");
 		html.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}		
