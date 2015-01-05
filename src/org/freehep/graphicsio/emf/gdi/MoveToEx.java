@@ -57,6 +57,6 @@ public class MoveToEx extends EMFTag {
         currentFigure.moveTo(
             (float) point.getX(),
             (float) point.getY());
-        renderer.setFigure(currentFigure);
+        renderer.setFigure(currentFigure);        
     }
 }

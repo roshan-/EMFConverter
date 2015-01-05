@@ -51,7 +51,7 @@ public class SVGLine extends SVGGraphicObjectConverter {
         svgLine.setAttributeNS
             (null, SVG_X2_ATTRIBUTE, doubleString(line.getX2()));
         svgLine.setAttributeNS
-            (null, SVG_Y2_ATTRIBUTE, doubleString(line.getY2()));
+            (null, SVG_Y2_ATTRIBUTE, doubleString(line.getY2()));        
         return svgLine;
     }
 }

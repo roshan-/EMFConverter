@@ -74,6 +74,8 @@ public class SVGPath extends SVGGraphicObjectConverter {
         // Set winding rule if different than SVG's default
         if (path.getPathIterator(null).getWindingRule() == GeneralPath.WIND_EVEN_ODD)
             svgPath.setAttributeNS(null, SVG_FILL_RULE_ATTRIBUTE, SVG_EVEN_ODD_VALUE);
+        else
+        	svgPath.setAttributeNS(null, SVG_FILL_RULE_ATTRIBUTE, SVG_NON_ZERO_VALUE);
 
         return svgPath;
     }

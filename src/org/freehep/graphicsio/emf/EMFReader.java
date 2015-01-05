@@ -59,7 +59,7 @@ public class EMFReader {
 		is.close();*/
 	}
 
-	protected void read(String srcFileName, String destFileName, int nTags) {
+	protected void read(String srcFileName, String destFileName, int offset, int nTags) {
 
 
 		// read the EMF file
@@ -79,6 +79,7 @@ public class EMFReader {
 			
 			int i = 0;
 			while (((i++ < nTags) && (tag = is.readTag()) != null)){
+				if (i>=offset)
 				tags.add(tag);				
 			}      
 			long nbytes = fileInput.available();

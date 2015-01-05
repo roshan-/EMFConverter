@@ -55,7 +55,7 @@ public class exportToSVG {
 		
 		//g.setSVGCanvasSize(new Dimension((int) (renderer.getSize().getWidth()/renderer.getScaleX()), (int) (renderer.getSize().getHeight()/renderer.getScaleX())));
 		
-		g.setSVGCanvasSize(new Dimension((int) (renderer.getSize().getWidth()), (int) (renderer.getSize().getHeight())));
+//		g.setSVGCanvasSize(new Dimension((int) (renderer.getSize().getWidth()), (int) (renderer.getSize().getHeight())));
 		
 		renderer.getViewportOrigin();
 		/*AffineTransform at = new AffineTransform(1.0,//1/renderer.getScaleX(), 
@@ -73,7 +73,7 @@ public class exportToSVG {
 		renderer.setInitialTransform(at);
 		
 		renderer.paint(g);
-		
+		g.setSVGCanvasSize(new Dimension((int) (renderer.getSize().getWidth()), (int) (renderer.getSize().getHeight())));
 		
 			
 		Writer out = null;

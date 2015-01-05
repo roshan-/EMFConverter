@@ -573,8 +573,8 @@ public class SVGGraphics2D extends AbstractGraphics2D
     public Element getRoot(Element svgRoot) {
         svgRoot = domTreeManager.getRoot(svgRoot);
         if (svgCanvasSize != null){
-            svgRoot.setAttributeNS(null, SVG_WIDTH_ATTRIBUTE,  String.valueOf( svgCanvasSize.width ) );
-            svgRoot.setAttributeNS(null, SVG_HEIGHT_ATTRIBUTE, String.valueOf( svgCanvasSize.height) );
+            svgRoot.setAttributeNS(null, SVG_WIDTH_ATTRIBUTE,  String.valueOf( svgCanvasSize.width ) +"px");
+            svgRoot.setAttributeNS(null, SVG_HEIGHT_ATTRIBUTE, String.valueOf( svgCanvasSize.height) +"px");
         }
         svgRoot.setAttributeNS(null, SVG_SCALE_ATTRIBUTE, "[" + String.valueOf(gc.getTransform().getScaleX())+ "," + String.valueOf(gc.getTransform().getScaleY()) + "]");
         svgRoot.setAttributeNS(null, SVG_TRANSFORM_ATTRIBUTE, "translate(" + gc.getTransform().getTranslateX() + "," + String.valueOf(gc.getTransform().getTranslateY()+")"));
@@ -865,7 +865,6 @@ public class SVGGraphics2D extends AbstractGraphics2D
                 // matrix determinant
                 throw new SVGGraphics2DRuntimeException(ERR_UNEXPECTED);
             }
-
             gc.transform(xform);
             retVal = drawImage(img, 0, 0, null);
             gc.transform(inverseTransform);
@@ -1381,7 +1380,7 @@ public class SVGGraphics2D extends AbstractGraphics2D
      */
     public void fill(Shape s) {
         Element svgShape = shapeConverter.toSVG(s);
-        if (svgShape != null) {
+        if (svgShape != null) {        	
             domGroupManager.addElement(svgShape, DOMGroupManager.FILL);
         }
     }

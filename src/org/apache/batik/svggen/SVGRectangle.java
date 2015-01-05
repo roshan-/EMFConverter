@@ -90,7 +90,7 @@ public class SVGRectangle extends SVGGraphicObjectConverter {
             
             return svgRect;
         }
-        else{
+        else{        	
             // Handle degenerate cases
             if(rect.getWidth() == 0 && rect.getHeight() > 0){
                 // Degenerate to a line

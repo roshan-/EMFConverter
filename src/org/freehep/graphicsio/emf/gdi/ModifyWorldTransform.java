@@ -77,6 +77,8 @@ public class ModifyWorldTransform extends EMFTag implements EMFConstants {
                 renderer.getPathTransform().concatenate(transform);
                 renderer.transform(transform);
             } else {
+            	
+            	renderer.getTransform().concatenate(transform);
                 renderer.transform(transform);
             }
         }

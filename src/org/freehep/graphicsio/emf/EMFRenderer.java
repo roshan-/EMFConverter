@@ -74,6 +74,7 @@ public class EMFRenderer {
 		return viewportSize;
 	}
 
+    private int originalFontSize;
 	/**
      * size of the emf window, set by SetWindowExtEx
      */
@@ -145,7 +146,7 @@ public class EMFRenderer {
      * written by {@link org.freehep.graphicsio.emf.gdi.SetPolyFillMode} used by
      * e.g. {@link org.freehep.graphicsio.emf.gdi.PolyPolygon16}
      */
-    private int windingRule = GeneralPath.WIND_EVEN_ODD;
+    private int windingRule = GeneralPath.WIND_NON_ZERO;//.WIND_EVEN_ODD;
 
     /**
      * Defined by SetBkModes, either {@link EMFConstants#BKG_OPAQUE} or
@@ -266,8 +267,14 @@ public class EMFRenderer {
      * @return the size.
      */
     public Dimension getSize() {
-        //DIA10
-    	return header.getBounds().getSize();
+        //DIA10    	
+    	//DIAZ3 return header.getBounds().getSize();
+    	Dimension d = header.getBounds().getSize();    	
+    	if ((initialTransform != null) && (viewportSize == null) && (windowSize == null)) 
+    	d.setSize(d.getWidth()-initialTransform.getTranslateX(), 
+    			 d.getHeight()-initialTransform.getTranslateY());
+    	return d;
+    	
     	//return header.getFrame().getSize();
     	//return new Dimension((int)(bounds.width), (int)(bounds.height));
         // TODO see the mapModePart of resetTransformation()
@@ -276,7 +283,7 @@ public class EMFRenderer {
             return new Dimension(
             (int)Math.ceil(bounds.width * TWIP_SCALE),
             (int)Math.ceil(bounds.height * TWIP_SCALE));*/
-    }
+    }        
 
     public void setInitialTransform(AffineTransform at) {
     	initialTransform = at;
@@ -314,12 +321,13 @@ public class EMFRenderer {
         // used by SetWorldTransform to reset transformation
         if (initialTransform == null)
         initialTransform = g2.getTransform();
+        
 
         // set the initial value, defaults for EMF
         path = null;
         figure = null;
         meterLimit = 10;
-        windingRule = GeneralPath.WIND_EVEN_ODD;
+        windingRule = GeneralPath.WIND_NON_ZERO;
         bkMode = EMFConstants.BKG_OPAQUE;
         useCreatePen = true;
         scaleMode = Image.SCALE_SMOOTH;
@@ -386,6 +394,9 @@ public class EMFRenderer {
         if (mapModeTransform != null) {
             g2.transform(mapModeTransform);
         }*/
+        /*if (mapModeTransform != null) {
+            g2.setTransform(mapModeTransform);
+        }*/
         if (mapModeTransform != null) {
             g2.setTransform(mapModeTransform);
         }
@@ -425,9 +436,9 @@ public class EMFRenderer {
 
             g2.scale(scaleX,  scaleY);
           
-          /*  ((SVGGraphics2D) g2).setSVGCanvasSize(new Dimension((int)(this.getSize().getWidth() / scaleX), 
+         /*   ((SVGGraphics2D) g2).setSVGCanvasSize(new Dimension((int)(this.getSize().getWidth() / scaleX), 
             									  (int)(this.getSize().getHeight() / scaleY)));
-            									  */            
+*/
             //((SVGGraphics2D) g2).setScaleX(scaleX);
             //((SVGGraphics2D) g2).setScaleY(scaleY);
         }
@@ -524,7 +535,7 @@ public class EMFRenderer {
      * @param g2 Painting context
      * @param s Shape to fill with current brush
      */
-    private void fillAndDrawOrAppend(Graphics2D g2, Shape s) {
+    private void fillAndDrawOrAppend(Graphics2D g2, Shape s) {    	
         // don't draw, just append the shape if BeginPath
         // has opened the path
         if (!appendToPath(s)) {
@@ -686,7 +697,16 @@ public class EMFRenderer {
         } else {
             layout.draw(g2, (float) x, (float) y);
         }*/
-
+    	
+    	if ((text == null) || text.equals(""))
+    		return;
+    	
+    	/*Font font = g2.getFont();
+    	int alfa = (int) ((bounds.getHeight() - originalFontSize)/1.3);
+    	g2.setFont(new Font(font.getName(), font.getStyle(), (int)(bounds.getHeight()-alfa)));
+    	*/
+    	//g2.setFont(new Font(font.getName(), font.getStyle(), (int)(originalFontSize*1.5)));
+		
     	y -= 0.125 * g2.getFont().getSize();
     	if (path != null) {
     		// do not use g2.drawString(str, x, y) to be aware of path
@@ -712,10 +732,10 @@ public class EMFRenderer {
 					g2.drawString(text, (float) ((float)  x + bounds.getWidth() - textWidth), (float) y);
 					//layout.draw(g2, (float) ((float)  x + bounds.getWidth() - textWidth), (float) y);
 				} else if ((textAlignMode & EMFConstants.TA_BASELINE) != 0) {                        
-					g2.drawString(text, (int) x, (int) y);
+					g2.drawString(text, (int) x-g2.getFont().getSize()/10, (int) y+g2.getFont().getSize()/10);
 				} else
 					//g2.drawString(text, (int)x, (int) y);
-					g2.drawString(text, (int) x, (int) y+(int)g2.getFont().getSize());
+					g2.drawString(text, (int) x, (int) y+(int)(g2.getFont().getSize()));
     		}
     		else
     		{
@@ -851,7 +871,10 @@ public class EMFRenderer {
      */
     private void fillShape(Graphics2D g2, Shape s) {
         g2.setPaint(brushPaint);
-        g2.fill(s);
+        g2.setStroke(penStroke);
+        g2.fill(s);        
+        
+        
     }
 
     /**
@@ -872,8 +895,9 @@ public class EMFRenderer {
         }
         // R2_COPYPEN 	Pixel is the pen color.
         else if (rop2 == EMFConstants.R2_COPYPEN) {
+        	this.setWindingRule(GeneralPath.WIND_NON_ZERO);
             g2.setComposite(AlphaComposite.SrcOver);
-            g2.setPaint(penPaint);
+            g2.setPaint(penPaint);            
         }
         // R2_NOP 	Pixel remains unchanged.
         else if (rop2 == EMFConstants.R2_NOP) {
@@ -918,7 +942,13 @@ public class EMFRenderer {
     // ---------------------------------------------------------------------
 
     public void setFont(Font font) {
-        g2.setFont(font);
+    	
+    	
+    	//g2.setFont(new Font(font.getName(), font.getStyle(), (int)(font.getSize()*1.5)));
+    	
+        //DIAZ 3
+    	g2.setFont(font);
+    	originalFontSize = font.getSize();
         
     }
 
@@ -928,7 +958,7 @@ public class EMFRenderer {
 
     public void transform(AffineTransform transform) {
         g2.transform(transform);
-        //DIA25 g2.setTransform(transform);
+        //DIA25 g2.setTransform(transform);      
     }
 
     public void resetTransformation() {
@@ -1188,6 +1218,18 @@ public class EMFRenderer {
 	public void setScaleY(double scaleY) {
 		this.scaleY = scaleY;
 	}
-    
+
+	public void drawLine(float X, float Y) {				
+	    g2.setPaint(brushPaint);
+        g2.setStroke(penStroke);        
+		this.getFigure().lineTo(X, Y);
+		
+/*		g2.drawLine((int)this.getFigure().getCurrentPoint().getX(), 
+				(int)this.getFigure().getCurrentPoint().getY(), 
+				(int)X, 
+				(int)Y);*/
+			
+		
+	}
     
 }

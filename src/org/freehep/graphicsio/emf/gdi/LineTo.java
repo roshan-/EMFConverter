@@ -51,9 +51,8 @@ public class LineTo extends EMFTag {
         // The LineTo function draws a line from the current position up to,
         // but not including, the specified point.
         // The line is drawn by using the current pen and, if the pen is a
-        // geometric pen, the current brush.
-        renderer.getFigure().lineTo(
-            (float)point.getX(),
-            (float)point.getY());
+        // geometric pen, the current brush.                    
+        renderer.drawLine((float)point.getX(),
+                (float)point.getY());        	
     }
 }

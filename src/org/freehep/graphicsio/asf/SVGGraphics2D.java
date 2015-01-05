@@ -589,10 +589,11 @@ public class SVGGraphics2D extends AbstractGraphics2D
                 				this.getSVGCanvasSize().getWidth() +"," +
                 				this.getSVGCanvasSize().getHeight()+ "]";
 */
-                String str = "[" + "0.0"+ "," +
-                		"0.0" + "," +
-                				this.getSVGCanvasSize().getWidth() +"," +
-                				this.getSVGCanvasSize().getHeight()+ "]";
+                
+               
+                String str = "0 0 " +
+                				this.getSVGCanvasSize().getWidth() +" " +
+                				this.getSVGCanvasSize().getHeight();
                 svgRoot.setAttributeNS(null, SVGConstants.SVG_VIEW_BOX_ATTRIBUTE, str);
                
                 //DIA21
@@ -691,8 +692,11 @@ public class SVGGraphics2D extends AbstractGraphics2D
     public Element getRoot(Element svgRoot) {
         svgRoot = domTreeManager.getRoot(svgRoot);        
         if (svgCanvasSize != null){
-            svgRoot.setAttributeNS(null, SVG_WIDTH_ATTRIBUTE,  String.valueOf( svgCanvasSize.width ) );
-            svgRoot.setAttributeNS(null, SVG_HEIGHT_ATTRIBUTE, String.valueOf( svgCanvasSize.height) );
+        	svgRoot.setAttributeNS(null, SVG_X_ATTRIBUTE, "0px" );
+        	svgRoot.setAttributeNS(null, SVG_Y_ATTRIBUTE, "0px" );
+        	
+            svgRoot.setAttributeNS(null, SVG_WIDTH_ATTRIBUTE,  String.valueOf( svgCanvasSize.width ) +"px" );
+            svgRoot.setAttributeNS(null, SVG_HEIGHT_ATTRIBUTE, String.valueOf( svgCanvasSize.height) +"px");
         }
         return svgRoot;
     }
@@ -1495,8 +1499,9 @@ public class SVGGraphics2D extends AbstractGraphics2D
      * @see #setComposite(java.awt.Composite)
      * @see #setClip(Shape)
      */
-    public void fill(Shape s) {
+    public void fill(Shape s) {    	
         Element svgShape = shapeConverter.toSVG(s);
+        gc.getPaint().toString();
         if (svgShape != null) {
             domGroupManager.addElement(svgShape, DOMGroupManager.FILL);
         }

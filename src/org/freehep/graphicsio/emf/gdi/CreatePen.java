@@ -1,6 +1,7 @@
 // Copyright 2001, FreeHEP.
 package org.freehep.graphicsio.emf.gdi;
 
+import java.awt.Stroke;
 import java.io.IOException;
 
 import org.freehep.graphicsio.emf.EMFInputStream;
@@ -66,6 +67,6 @@ public class CreatePen extends EMFTag {
         //  DWORD dwStyleCount,    // length of custom style array
         //  CONST DWORD *lpStyle   // custom style array
         //);
-        renderer.storeGDIObject(index, pen);
+        renderer.storeGDIObject(index, pen);        
     }
 }

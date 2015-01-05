@@ -18,6 +18,7 @@
  */
 package org.apache.batik.svggen;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -132,7 +133,8 @@ public class DOMGroupManager implements SVGSyntax, ErrorConstants {
         //
         // If this is the first child to be added to the
         // currentGroup, 'freeze' the style attributes.
-        //
+        //    	
+    		 
         if (!currentGroup.hasChildNodes()) {
             currentGroup.appendChild(element);
 
@@ -143,6 +145,7 @@ public class DOMGroupManager implements SVGSyntax, ErrorConstants {
             domTreeManager.getStyleHandler().
                 setStyle(currentGroup, deltaGC.getGroupContext(),
                          domTreeManager.getGeneratorContext());
+            if (!element.getNodeName().equals("line")) {
             if ((method & DRAW) == 0) {
                 // force stroke:none
                 deltaGC.getGraphicElementContext().put(SVG_STROKE_ATTRIBUTE,
@@ -153,11 +156,55 @@ public class DOMGroupManager implements SVGSyntax, ErrorConstants {
                 deltaGC.getGraphicElementContext().put(SVG_FILL_ATTRIBUTE,
                                                        SVG_NONE_VALUE);
             }
+            } else {
+            	Color a =  (Color)gc.getPaint();     
+            	 if ((method & DRAW) == 0) {
+                     // force stroke:none
+                     deltaGC.getContext().
+                     put(SVG_STROKE_ATTRIBUTE, "rgb(" + a.getRed() +","
+                     		+ a.getGreen() +","
+                     		+ a.getBlue() +")");                    
+                 }
+                 if ((method & FILL) == 0) {
+                     // force fill:none
+                	 deltaGC.getContext().
+                     put(SVG_FILL_ATTRIBUTE, "rgb(" + a.getRed() +","
+                     		+ a.getGreen() +","
+                     		+ a.getBlue() +")");                    
+                 }
+                                     	
+            }
+            /*DIA03    
+            if (method == DRAW) {
+                // force stroke:none
+                deltaGC.getGraphicElementContext().put(SVG_STROKE_ATTRIBUTE,
+                                                       SVG_NONE_VALUE);
+            }else if (method == FILL){
+                // force fill:none
+                deltaGC.getGraphicElementContext().put(SVG_FILL_ATTRIBUTE,
+                                                       SVG_NONE_VALUE);
+            }*/
+            
+                         
+            //DIAZ 3
+            
+          
+            if (!element.getNodeName().equals("line")) {
             domTreeManager.getStyleHandler().
-                setStyle(element, deltaGC.getGraphicElementContext(),
-                         domTreeManager.getGeneratorContext());
+            setStyle(element, deltaGC.getGraphicElementContext(),
+                     domTreeManager.getGeneratorContext());
+            }
+            else
+            {
+            	  domTreeManager.getStyleHandler().
+                  setStyle(element, deltaGC.getContext(),
+                           domTreeManager.getGeneratorContext());
+            }
             setTransform(currentGroup, deltaGC.getTransformStack());
             domTreeManager.appendGroup(currentGroup, this);
+            
+ 
+        
         } else {
             if(gc.isTransformStackValid()) {
                 //
@@ -177,6 +224,8 @@ public class DOMGroupManager implements SVGSyntax, ErrorConstants {
                     currentGroup.appendChild(element);
                     // as there already are children we put all
                     // attributes (group + element) on the element itself.
+                    if (!element.getNodeName().equals("line")) {
+                    	
                     if ((method & DRAW) == 0) {
                         // force stroke:none
                         deltaGC.getContext().
@@ -186,6 +235,24 @@ public class DOMGroupManager implements SVGSyntax, ErrorConstants {
                         // force fill:none
                         deltaGC.getContext().
                             put(SVG_FILL_ATTRIBUTE, SVG_NONE_VALUE);
+                    }
+                    } else {
+                    	Color a =  (Color)gc.getPaint();     
+                    	 if ((method & DRAW) == 0) {
+                             // force stroke:none
+                             deltaGC.getContext().
+                             put(SVG_STROKE_ATTRIBUTE, "rgb(" + a.getRed() +","
+                             		+ a.getGreen() +","
+                             		+ a.getBlue() +")");                    
+                         }
+                         if ((method & FILL) == 0) {
+                             // force fill:none
+                        	 deltaGC.getContext().
+                             put(SVG_FILL_ATTRIBUTE, "rgb(" + a.getRed() +","
+                             		+ a.getGreen() +","
+                             		+ a.getBlue() +")");                    
+                         }
+                                             	
                     }
                     domTreeManager.getStyleHandler().
                         setStyle(element, deltaGC.getContext(),

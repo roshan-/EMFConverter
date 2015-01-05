@@ -52,5 +52,7 @@ public class IntersectClipRect extends EMFTag {
         // region from the intersection of the current clipping
         // region and the specified rectangle.
      //DIA18   renderer.clip(bounds);
+    	//DIA3 se vuelve a activar!!!
+    	renderer.clip(bounds);
     }
 }

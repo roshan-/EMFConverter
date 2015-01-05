@@ -54,6 +54,8 @@ public class StrokeAndFillPath extends EMFTag {
         if (currentPath != null) {
             renderer.fillShape(currentPath);
          //FIXME ASF   renderer.drawShape(currentPath);
+            // DIA26 Se descomenta
+            renderer.drawShape(currentPath);
             renderer.setPath(null);
         }
     }

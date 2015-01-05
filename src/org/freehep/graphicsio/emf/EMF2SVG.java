@@ -1,8 +1,13 @@
 // Copyright FreeHEP 2006-2007.
 package org.freehep.graphicsio.emf;
 
-import java.io.FileInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.freehep.graphicsio.ImageConstants;
 
@@ -28,7 +33,7 @@ public class EMF2SVG extends EMFConverter {
         }*/
     	
     	
-/*    	try {
+    /*	try {
     		//84203
     		int nTags = 297;
 			EMFReader reader = new EMFReader();
@@ -40,100 +45,96 @@ public class EMF2SVG extends EMFConverter {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        System.out.println("FILE SAVED");
-  */	
+        System.out.println("FILE SAVED");*/
+ 	
 
-        //export(ImageConstants.SVG, args[0], args.length > 1 ? args[1] : null);
-
-        /*if (args.length > 1)
-        export(ImageConstants.SVG, args[0], args[1]);
-    	else
-    		export(ImageConstants.SVG, args[0], null);   
-        */
-        
-    	//export(ImageConstants.SVG, "a.emf", "a_001.svg");
-    	//export(ImageConstants.SVG, "landscape.emf", "landscape.svg");
-    //	export(ImageConstants.SVG, "image2.emf", "image2.svg");
-    	//export(ImageConstants.SVG, "image5.emf", "image5.svg");
-    	//export(ImageConstants.SVG, "excel-ppt-2.emf", "excel-ppt-2.svg");
+            
     	
-    	//export(ImageConstants.SVG, "out.emf", "aaaa.svg");
-    	            	
-    	//export(ImageConstants.SVG, "Infographics.emf", "Infographics.svg");
-        
+    	
         boolean all = true;
-    	if (all == true)
+        String dirbase = "sampleEMFs/";
+/*    	if (all == true)
     	{
-    	export(ImageConstants.SVG, "images/13.emf", "images/13.emf.svg");
-    	export(ImageConstants.SVG, "images/14.emf", "images/14.emf.svg");
-    	export(ImageConstants.SVG, "images/15.emf", "images/15.emf.svg");
-    	export(ImageConstants.SVG, "images/16.emf", "images/16.emf.svg");
-    	export(ImageConstants.SVG, "images/17.emf", "images/17.emf.svg");
-    	export(ImageConstants.SVG, "images/18.emf", "images/18.emf.svg");
-    	export(ImageConstants.SVG, "images/19.emf", "images/19.emf.svg");
-    	export(ImageConstants.SVG, "images/20.emf", "images/20.emf.svg");
-    	export(ImageConstants.SVG, "images/21.emf", "images/21.emf.svg");
-    	export(ImageConstants.SVG, "images/22.emf", "images/22.emf.svg");
-    	export(ImageConstants.SVG, "images/23.emf", "images/23.emf.svg");
-    	export(ImageConstants.SVG, "images/24.emf", "images/24.emf.svg");
-    	export(ImageConstants.SVG, "images/25.emf", "images/25.emf.svg");
-    	export(ImageConstants.SVG, "images/26.emf", "images/26.emf.svg");
-    	export(ImageConstants.SVG, "images/27.emf", "images/27.emf.svg");
-    	export(ImageConstants.SVG, "images/28.emf", "images/28.emf.svg");
-    	export(ImageConstants.SVG, "images/29.emf", "images/29.emf.svg");
-    	export(ImageConstants.SVG, "images/30.emf", "images/30.emf.svg");
-    	export(ImageConstants.SVG, "images/31.emf", "images/31.emf.svg");
-    	export(ImageConstants.SVG, "images/32.emf", "images/32.emf.svg");    	
-    	export(ImageConstants.SVG, "images/33.emf", "images/33.emf.svg");
-    	export(ImageConstants.SVG, "images/34.emf", "images/34.emf.svg");
-    	export(ImageConstants.SVG, "images/35.emf", "images/35.emf.svg");
-    	export(ImageConstants.SVG, "images/36.emf", "images/36.emf.svg");
-    	export(ImageConstants.SVG, "images/37.emf", "images/37.emf.svg");
-    	export(ImageConstants.SVG, "images/38.emf", "images/38.emf.svg");
-    	export(ImageConstants.SVG, "images/39.emf", "images/39.emf.svg");
-    	export(ImageConstants.SVG, "images/40.emf", "images/40.emf.svg");
-    	export(ImageConstants.SVG, "images/41.emf", "images/41.emf.svg");
-    	export(ImageConstants.SVG, "images/42.emf", "images/42.emf.svg");
-    	export(ImageConstants.SVG, "images/43.emf", "images/43.emf.svg");
-    	export(ImageConstants.SVG, "images/44.emf", "images/44.emf.svg");
-    	export(ImageConstants.SVG, "images/45.emf", "images/45.emf.svg");
-    	export(ImageConstants.SVG, "images/46.emf", "images/46.emf.svg");
-    	export(ImageConstants.SVG, "images/48.emf", "images/48.emf.svg");
-      	
-    	export(ImageConstants.SVG, "images/a.emf", "images/a.emf.svg");
-    	export(ImageConstants.SVG, "images/landscape.emf", "images/landscape.emf.svg");
-    	export(ImageConstants.SVG, "images/picture1313.emf", "images/picture1313.emf.svg");
-    	export(ImageConstants.SVG, "images/picture14.emf", "images/picture14.emf.svg");
-    	export(ImageConstants.SVG, "images/picture1414.emf", "images/picture1414.emf.svg");
-    	export(ImageConstants.SVG, "images/picture1515.emf", "images/picture1515.emf.svg");
-    	export(ImageConstants.SVG, "images/picture16.emf", "images/picture16.emf.svg");
-    	export(ImageConstants.SVG, "images/picture17.emf", "images/picture17.emf.svg");
-    	export(ImageConstants.SVG, "images/picture18.emf", "images/picture18.emf.svg");
-    	export(ImageConstants.SVG, "images/picture19.emf", "images/picture19.emf.svg");
-    	export(ImageConstants.SVG, "images/picture20.emf", "images/picture20.emf.svg");
-    	export(ImageConstants.SVG, "images/picture25.emf", "images/picture25.emf.svg");
-    	export(ImageConstants.SVG, "images/picture26.emf", "images/picture26.emf.svg");
-    	export(ImageConstants.SVG, "images/picture27.emf", "images/picture27.emf.svg");
-    	export(ImageConstants.SVG, "images/picture333.emf", "images/picture333.emf.svg");
-    	export(ImageConstants.SVG, "images/picture335.emf", "images/picture335.emf.svg");
-    	export(ImageConstants.SVG, "images/picture337.emf", "images/picture337.emf.svg");
-    	export(ImageConstants.SVG, "images/picture340.emf", "images/picture340.emf.svg");
-    	export(ImageConstants.SVG, "images/shpLogo.emf", "images/shpLogo.emf.svg");
-    	export(ImageConstants.SVG, "images/shpLogo1.emf", "images/shpLogo1.emf.svg");
+    		List<String> files = finder(System.getProperty("user.dir") + "/images/");
+    		for (int i = 0; i< files.size(); i++)
+    			export(ImageConstants.SVG, "images/"+ files.get(i), "images/"+ files.get(i)+".svg");    	
+    	}*/
+        if (all == true)
+    	{        
+    		List<String> files = finder(System.getProperty("user.dir") + "/"+dirbase);
+    		for (int i = 0; i< files.size(); i++)
+    			export(ImageConstants.SVG, dirbase+ files.get(i), dirbase+ files.get(i)+".svg");
+    		createHTML(dirbase, files);
+    		
     	}
     	else
-    	{
-    		//export(ImageConstants.SVG, "images/13.emf", "images/13.emf.svg");
-        	export(ImageConstants.SVG, "images/shpLogo.emf", "images/shpLogo.emf.svg");
-        	export(ImageConstants.SVG, "images/landscape.emf", "images/landscape.emf.svg");
-        	//export(ImageConstants.SVG, "images/24.emf", "images/24.emf.svg");
+    	{   
+    		String filename = "10008800_image10.emf";
+
+    		boolean createfile = false;
+    		
+    		if (createfile == true) {
+    		int nTags = 397;			
+			try {
+				EMFReader reader = new EMFReader();
+				reader.read(dirbase + filename, dirbase + "542321_image100_rec.emf", 500, nTags);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		}
+			
+			
+			
+//    		String filename = "542321_image100.emf";
+        	export(ImageConstants.SVG, dirbase + filename, dirbase+filename + ".svg");        	
+     /*   	export(ImageConstants.SVG, dirbase + "10008800_image12.emf", dirbase+"10008800_image12.emf.svg");
+        	export(ImageConstants.SVG, dirbase + "10008800_image13.emf", dirbase+"10008800_image13.emf.svg");
+       */ 	
     	}
-    	
-    	//export(ImageConstants.SVG, "images/picture333.emf", "images/picture333.emf.svg");
+    	    
     	
     	
     	
         System.out.println("EXPORT FINISHED");
         
+    }
+       
+    public static List<String> finder( String directory){     
+    	  List<String> textFiles = new ArrayList<String>();
+    	  File dir = new File(directory);
+    	  for (File file : dir.listFiles()) {
+    	    if (file.getName().endsWith((".emf"))) {
+    	      textFiles.add(file.getName());
+    	    }
+    	  }
+    	  return textFiles;    	
+    }
+    
+    public static void createHTML (String dir, List<String> files){
+    	PrintWriter writer;
+		try {
+			writer = new PrintWriter(dir + "out.html", "UTF-8");							
+			writer.println("<html>");
+	    	writer.println("<head><meta http-equiv=\"x-ua-compatible\" content=\"IE=edge,chrome=1\"></head><body>");
+	    	
+	    	for (int i = 0; i < files.size(); i++)
+	    	{
+	    		writer.println("<div>");
+	    		writer.println("<br>");
+	    		writer.println("<hr><p align=center>.SVG figure: "+files.get(i)+"</p>");
+	    		writer.println("<hr>");
+	    		writer.println("<br><br>");
+	    		writer.println("<img src=\""+ files.get(i) + ".svg\" width=\"100%\" />");
+	    		writer.println("</div>");
+	    	}
+	    	writer.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+    	
+    	
     }
 }
