@@ -20,8 +20,8 @@ public class BitmapInfo {
         this.header = header;
     }
 
-    public BitmapInfo(EMFInputStream emf) throws IOException {
-        header = new BitmapInfoHeader(emf);
+    public BitmapInfo(EMFInputStream emf) throws IOException {    	
+        header = new BitmapInfoHeader(emf);     
         // colormap not necessary for true color image
     }
 

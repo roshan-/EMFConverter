@@ -538,7 +538,7 @@ public class ImageGraphics2D extends PixelGraphics2D {
      * @throws IOException thrown by {@link #writeImage(java.awt.image.RenderedImage, String, java.util.Properties, java.io.OutputStream)}
      * @param image Image to convert
      * @param format e.g. {@link ImageConstants#JPG}, {@link ImageConstants#PNG}, {@link ImageConstants#RAW}
-     * @param props Properties for writing, e.g. {@link org.freehep.graphicsio.raw.RawImageWriteParam#BACKGROUND}
+     * @param props Properties for writing, e.g. {@link org.freehep.graphicsio.rawz.RawImageWriteParam#BACKGROUND}
      * @param encoding {@link ImageConstants#ENCODING_ASCII85}, {@link ImageConstants#ENCODING_FLATE} or null
      * @return bytes representing the image
      */

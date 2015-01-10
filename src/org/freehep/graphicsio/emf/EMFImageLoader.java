@@ -65,16 +65,22 @@ public class EMFImageLoader {
 
 			int color2 = new Color(red, green, blue).getRGB();
 
-			BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+			BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);			
 
 			int[] data = emf.readUnsignedByte(len - 8);
 
+			
+			
+			
 			// TODO: this is highly experimental and does
 			// not work for the tested examples
-			int strangeOffset = width % 8;
+			/*int strangeOffset = width % 8;
 			if (strangeOffset != 0) {
 				strangeOffset = 8 - strangeOffset;
-			}
+			}-*/
+			
+			int strangeOffset = (int) Math.ceil((double)width/32.0)*32-width;
+						
 
 			// iterator for pixel data
 			int pixel = 0;
@@ -99,8 +105,7 @@ public class EMFImageLoader {
 				pixel = pixel + strangeOffset;
 			}
 
-			/* for debugging: shows every loaded image
-            javax.swing.JFrame f = new javax.swing.JFrame("test");
+/*			javax.swing.JFrame f = new javax.swing.JFrame("test");
             f.getContentPane().setBackground(Color.green);
             f.getContentPane().setLayout(
                 new java.awt.BorderLayout(0, 0));
@@ -110,10 +115,81 @@ public class EMFImageLoader {
                     new javax.swing.ImageIcon(result)));
             f.setSize(new java.awt.Dimension(width + 20, height + 20));
             f.setVisible(true);*/
+			
 
 			return result;
 
-		} else if ((bmi.getBitCount() == 8) &&
+		}else if (bmi.getBitCount() == 4) {			
+			int ncolors = bmi.getClrUsed();
+			int colors[] = new int[ncolors];
+			for (int i = 0; i < ncolors; i++)
+			{
+				int blue = emf.readUnsignedByte();
+				int green = emf.readUnsignedByte();
+				int red = emf.readUnsignedByte();
+				/*int unused =*/ emf.readUnsignedByte();
+
+				colors[i] =  new Color(red, green, blue).getRGB();				
+			}
+						
+			BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);			
+
+			int[] data = emf.readUnsignedByte(len - ncolors*4);					
+			
+			// TODO: this is highly experimental and does
+			// not work for the tested examples
+			/*int strangeOffset = width % 8;
+			if (strangeOffset != 0) {
+				strangeOffset = 8 - strangeOffset;
+			}-*/
+			
+			//int strangeOffset = (int) Math.ceil((double)width*4/32.0)*32-width*4;
+			
+			int strangeOffset = (int) Math.floor(((double)width*4+31)/32.0)*8-width;
+						
+
+			// iterator for pixel data
+			int pixel = 0;
+
+			// mask for getting the bits from a pixel data byte
+			int[] mask = {0xF0, 0x0F};
+
+			// image data are swapped compared to java standard
+			for (int y = height - 1; y > -1; y--) {
+				for (int x = 0; x < width; x++) {
+					int pixelDataGroup = data[pixel / 2];
+					int pixelData = pixelDataGroup & mask[pixel % 2];
+					
+					
+					if (pixel % 2 == 1)
+					{						
+						result.setRGB(x, y, colors[pixelData]);
+					}
+					else
+						result.setRGB(x, y, colors[pixelData>>4]);
+					pixel ++;
+				}
+				// add the extra width
+				pixel = pixel + strangeOffset;				
+			}
+
+			/*javax.swing.JFrame f = new javax.swing.JFrame("test");
+            f.getContentPane().setBackground(Color.green);
+            f.getContentPane().setLayout(
+                new java.awt.BorderLayout(0, 0));
+            f.getContentPane().add(
+                java.awt.BorderLayout.CENTER,
+                new javax.swing.JLabel(
+                    new javax.swing.ImageIcon(result)));
+            f.setSize(new java.awt.Dimension(width + 20, height + 20));
+            f.setVisible(true);*/
+			
+
+			return result;
+
+		}
+		
+		else if ((bmi.getBitCount() == 8) &&
 				(bmi.getCompression() == EMFConstants.BI_RGB)) {
 			// 8 	The bitmap has a maximum of 256 colors, and the bmiColors member
 			// of BITMAPINFO contains up to 256 entries. In this case, each byte in

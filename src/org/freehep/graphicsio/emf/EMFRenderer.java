@@ -700,6 +700,8 @@ public class EMFRenderer {
     	
     	if ((text == null) || text.equals(""))
     		return;
+    	if (text.equals("191.5"))
+    		System.out.print("");
     	
     	/*Font font = g2.getFont();
     	int alfa = (int) ((bounds.getHeight() - originalFontSize)/1.3);
@@ -725,7 +727,7 @@ public class EMFRenderer {
     			FontRenderContext frc = g2.getFontRenderContext();
 				TextLayout layout = new TextLayout(text, g2.getFont(), frc);
 				double textWidth = layout.getBounds().getWidth();
-    			if ((textAlignMode & EMFConstants.TA_CENTER) != 0) {
+    			if ((textAlignMode & EMFConstants.TA_CENTER) != 0) {    				
 					g2.drawString(text, (float) ((float) x + (bounds.getWidth() - textWidth) / 2), (float) y);
 					//layout.draw(g2, (float) ((float) x + (bounds.getWidth() - textWidth) / 2), (float) y);
 				} else if ((textAlignMode & EMFConstants.TA_RIGHT) != 0) {
@@ -739,15 +741,16 @@ public class EMFRenderer {
     		}
     		else
     		{
-    	
+    			//x += modifyXvalue(text);    			   			
+				
     			if (mode == EMFConstants.GM_COMPATIBLE)
     			{
     				g2.setPaint(textColor);
 
     				//g2.drawString(text, (int)x,(int) y);
-    				FontRenderContext frc = g2.getFontRenderContext();
-    				TextLayout layout = new TextLayout(text, g2.getFont(), frc);
-    				double textWidth = layout.getBounds().getWidth();
+    				FontRenderContext frc = g2.getFontRenderContext();    				
+    				TextLayout layout = new TextLayout(text, g2.getFont(), frc);    				
+    				double textWidth = layout.getBounds().getWidth();    				
     				if ((textAlignMode & EMFConstants.TA_CENTER) != 0) {
     					g2.drawString(text, (float) ((float) x + (bounds.getWidth() - textWidth) / 2), (float) y);
     					//layout.draw(g2, (float) ((float) x + (bounds.getWidth() - textWidth) / 2), (float) y);
@@ -756,8 +759,14 @@ public class EMFRenderer {
     					//layout.draw(g2, (float) ((float)  x + bounds.getWidth() - textWidth), (float) y);
     				} else if ((textAlignMode & EMFConstants.TA_BASELINE) != 0) {                        
     					g2.drawString(text, (int) x, (int) y);
-    				} else if (textAlignMode == 0) {
-    					g2.drawString(text, (int) x, (int) y+(int)g2.getFont().getSize());
+    				} else if (textAlignMode == 0) {					
+/*    					int oldsize = g2.getFont().getSize();
+    					float newsize = (float) (((float) g2.getFont().getSize()) * (float) (bounds.getWidth()/textWidth));   					
+    					g2.setFont(g2.getFont().deriveFont(newsize));
+  */					
+    					
+    					g2.drawString(text, (int) x, (int) y+(int)(g2.getFont().getSize()*1.25));    					
+    				//	g2.setFont(g2.getFont().deriveFont(oldsize));
     				}    					
     				else
     					//g2.drawString(text, (int) x-(int)bounds.getWidth()/2, (int) y+(int)bounds.getHeight());
@@ -1231,5 +1240,47 @@ public class EMFRenderer {
 			
 		
 	}
-    
+
+	private int modifyXvalue(String text)
+	{
+		int offset;
+		int p;
+		float numunos = 0, numcomas = 0, numpuntos = 0;
+		String origtext = text;
+		String tmp = text;
+
+		FontRenderContext frc2 = g2.getFontRenderContext();    				
+		TextLayout layout2 = new TextLayout("1", g2.getFont(), frc2);    				
+		TextLayout layout3 = new TextLayout("8", g2.getFont(), frc2);
+		TextLayout layout6 = new TextLayout("M", g2.getFont(), frc2);
+		double textWidth2 = layout2.getBounds().getWidth(); 
+		double textWidth3 = layout3.getBounds().getWidth();
+		double textWidth6 = layout6.getBounds().getWidth();
+		TextLayout layout4 = new TextLayout(".", g2.getFont(), frc2);
+		TextLayout layout5 = new TextLayout(",", g2.getFont(), frc2);
+		double textWidth4 = layout4.getBounds().getWidth(); 
+		double textWidth5 = layout5.getBounds().getWidth();
+				
+		tmp = text;
+		while ((p = tmp.indexOf("1")) != -1)
+		{
+			tmp = tmp.substring(p+1, tmp.length());
+			numunos++;
+		}
+		tmp = text;
+		while ((p = tmp.indexOf(",")) != -1)
+		{
+			tmp = tmp.substring(p+1, tmp.length());
+			numcomas++;
+		}
+		tmp = text;
+		while ((p = tmp.indexOf(".")) != -1)
+		{
+			tmp = tmp.substring(p+1, tmp.length());
+			numpuntos++;
+		}
+		offset = (int) Math.ceil(numunos*1.20+numcomas*1.60+numpuntos*1.69);
+		return offset;
+	}
 }
+

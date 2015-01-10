@@ -19,6 +19,7 @@
 package org.apache.batik.svggen;
 
 import java.awt.Color;
+import java.awt.TexturePaint;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -156,7 +157,21 @@ public class DOMGroupManager implements SVGSyntax, ErrorConstants {
                 deltaGC.getGraphicElementContext().put(SVG_FILL_ATTRIBUTE,
                                                        SVG_NONE_VALUE);
             }
-            } else {
+            } else {            	
+            	if (gc.getPaint().getClass() == TexturePaint.class)
+            	{
+            		 if ((method & DRAW) == 0) {
+                         // force stroke:none
+                         deltaGC.getGraphicElementContext().put(SVG_STROKE_ATTRIBUTE,
+                                                                SVG_NONE_VALUE);
+                     }
+                     if ((method & FILL) == 0) {
+                         // force fill:none
+                         deltaGC.getGraphicElementContext().put(SVG_FILL_ATTRIBUTE,
+                                                                SVG_NONE_VALUE);
+                     }
+            	}else {
+            	
             	Color a =  (Color)gc.getPaint();     
             	 if ((method & DRAW) == 0) {
                      // force stroke:none
@@ -172,7 +187,7 @@ public class DOMGroupManager implements SVGSyntax, ErrorConstants {
                      		+ a.getGreen() +","
                      		+ a.getBlue() +")");                    
                  }
-                                     	
+            	}              	
             }
             /*DIA03    
             if (method == DRAW) {
@@ -237,6 +252,19 @@ public class DOMGroupManager implements SVGSyntax, ErrorConstants {
                             put(SVG_FILL_ATTRIBUTE, SVG_NONE_VALUE);
                     }
                     } else {
+                    	if (gc.getPaint().getClass() == TexturePaint.class)
+                    	{
+                    		 if ((method & DRAW) == 0) {
+                                 // force stroke:none
+                                 deltaGC.getGraphicElementContext().put(SVG_STROKE_ATTRIBUTE,
+                                                                        SVG_NONE_VALUE);
+                             }
+                             if ((method & FILL) == 0) {
+                                 // force fill:none
+                                 deltaGC.getGraphicElementContext().put(SVG_FILL_ATTRIBUTE,
+                                                                        SVG_NONE_VALUE);
+                             }
+                    	}else {
                     	Color a =  (Color)gc.getPaint();     
                     	 if ((method & DRAW) == 0) {
                              // force stroke:none
@@ -252,6 +280,7 @@ public class DOMGroupManager implements SVGSyntax, ErrorConstants {
                              		+ a.getGreen() +","
                              		+ a.getBlue() +")");                    
                          }
+                    	}
                                              	
                     }
                     domTreeManager.getStyleHandler().

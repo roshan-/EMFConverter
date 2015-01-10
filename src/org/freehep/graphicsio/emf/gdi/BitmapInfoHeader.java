@@ -15,6 +15,14 @@ import org.freehep.graphicsio.emf.EMFOutputStream;
  */
 public class BitmapInfoHeader implements EMFConstants {
 
+	
+	public static final int BI_RGB =  0;
+	public static final int BI_RLE8 =  1;
+	public static final int BI_RLE4 =  2;
+	public static final int BI_BITFIELDS =  3;
+	public static final int BI_JPEG =  4;
+	public static final int BI_PNG =  5;
+	
     public static final int size = 40;
 
     private int width;
@@ -53,7 +61,7 @@ public class BitmapInfoHeader implements EMFConstants {
     }
 
     public BitmapInfoHeader(EMFInputStream emf) throws IOException {
-        /*int len = */ emf.readDWORD(); // seems fixed
+        int len =  emf.readDWORD(); // seems fixed
         width = emf.readLONG();
         height = emf.readLONG();
         planes = emf.readWORD();
@@ -112,5 +120,9 @@ public class BitmapInfoHeader implements EMFConstants {
 
     public int getHeight() {
         return height;
+    }
+    
+    public int getSize() {
+    	return 40;
     }
 }

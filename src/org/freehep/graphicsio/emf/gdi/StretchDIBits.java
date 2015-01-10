@@ -71,6 +71,7 @@ public class StretchDIBits extends EMFTag implements EMFConstants {
             throws IOException {
 
         StretchDIBits tag = new StretchDIBits();
+        long pinit = emf.getLength();
         tag.bounds = emf.readRECTL(); // 16
         tag.x = emf.readLONG(); // 20
         tag.y = emf.readLONG(); // 24
@@ -79,19 +80,27 @@ public class StretchDIBits extends EMFTag implements EMFConstants {
         tag.width = emf.readLONG(); // 36
         tag.height = emf.readLONG(); // 40
         // ignored
-        emf.readDWORD(); // 44
-        emf.readDWORD(); // 48
-        emf.readDWORD(); // 52
-        emf.readDWORD(); // 56
+        int offbmisrc = emf.readDWORD(); // 44
+        int szbmisrc = emf.readDWORD(); // 48
+        int offbitssrc = emf.readDWORD(); // 52
+        int szbitssrc = emf.readDWORD(); // 56
 
         tag.usage = emf.readDWORD(); // 60
         tag.dwROP = emf.readDWORD(); // 64
         tag.widthSrc = emf.readLONG(); // 68
         tag.heightSrc = emf.readLONG(); // 72
 
+        long bytesread = pinit - emf.getLength()+8;
+        
+        int nbasura =(int) (offbmisrc - bytesread)/8;
+        for (int i = 0; i < nbasura;i++)
+        	emf.readDWORD();        
+        
+        pinit = emf.getLength();
         // FIXME: this size can differ and can be placed somewhere else
         tag.bmi = new BitmapInfo(emf);
-
+        bytesread = pinit - emf.getLength();
+        
         tag.image = EMFImageLoader.readImage(
             tag.bmi.getHeader(),
             tag.width,

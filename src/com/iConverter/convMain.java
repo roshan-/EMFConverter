@@ -12,7 +12,7 @@ import org.freehep.graphicsio.emf.EMFConverter;
 public class convMain extends EMFConverter{
 
 	public static void main(String[] args) {
-		final String inDir= "D:\\0\\t\\sampleEMFs\\";
+		final String inDir= "D:\\0\\t\\SampleEMFs\\small\\";
 		
 		FileWriter html;
 		try {
@@ -27,7 +27,11 @@ public class convMain extends EMFConverter{
 			}
 		})) {
 			System.out.println("Processing..."+f.getName());
-			export(ImageConstants.SVG, inDir+f.getName(), inDir+f.getName()+"_adrian.svg");		 		 
+			try {
+				export(ImageConstants.SVG, inDir+f.getName(), inDir+f.getName()+"_adrian.svg");
+			} catch (Throwable t) {
+				t.printStackTrace();
+			}
 			html.write("\t<div>\n\t\t\n\t\t<br>\n\t\t<hr><p align=center>.SVG figure: "+ f.getName() + 
 					"</p>\n\t\t<hr>\n\t\t<br>\n\t\t<br>\n\t\t<img src=\""+f.getName()+"_adrian.svg\" width=\"100%\" />\n\t</div>\n");
 		}
