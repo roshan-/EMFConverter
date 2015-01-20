@@ -52,18 +52,6 @@ public class ExtLogPen extends AbstractPen {
         color = emf.readCOLORREF();
         hatch = emf.readULONG();
         int nStyle = emf.readDWORD();
-        // it seems we always have to read one!
-//FIXME ASF
-        /*
-        if (nStyle == 0)
-            emf.readDWORD();
-        if (nStyle > 1)
-        	System.out.println("$$$" + nStyle);
-        style = emf.readDWORD(nStyle);
-        //if (nStyle != 0)
-        //	style = emf.readDWORD(nStyle);*/
-        
-        // DIA13
         style = new int[nStyle];
         for (int i = 0; i < nStyle; i++)
         	style[i] = emf.readDWORD();

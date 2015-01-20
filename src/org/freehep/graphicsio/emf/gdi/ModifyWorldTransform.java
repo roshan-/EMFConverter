@@ -97,12 +97,8 @@ public class ModifyWorldTransform extends EMFTag implements EMFConstants {
                 renderer.setPathTransform(transform);
             } else {
                 AffineTransform transform = new AffineTransform(this.transform);
-              //PBA  transform.concatenate(renderer.getTransform());
-              //  renderer.resetTransformation();
-                //renderer.transform(transform);
                 renderer.setTransform(transform);
             }
-        	//System.out.println("KKK");
         }
 
         // Unknown mode

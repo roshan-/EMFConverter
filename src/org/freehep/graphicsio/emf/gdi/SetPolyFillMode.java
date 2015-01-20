@@ -62,16 +62,7 @@ public class SetPolyFillMode extends EMFTag implements EMFConstants {
      * @param polyFillMode PolyFillMode to convert
      * @return winding rule
      */
-    private int getWindingRule(int polyFillMode) {
-    	//DIA3 Esta cruzado MALL!!!!
-        /*if (polyFillMode == EMFConstants.WINDING) {
-            return GeneralPath.WIND_EVEN_ODD;
-        } else if (polyFillMode == EMFConstants.ALTERNATE) {
-            return GeneralPath.WIND_NON_ZERO;
-        } else {
-            return GeneralPath.WIND_EVEN_ODD;
-        }*/
-        
+    private int getWindingRule(int polyFillMode) {    	        
         if (polyFillMode == EMFConstants.WINDING) {
             return GeneralPath.WIND_NON_ZERO;
         } else if (polyFillMode == EMFConstants.ALTERNATE) {

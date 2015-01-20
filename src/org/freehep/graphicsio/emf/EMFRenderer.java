@@ -101,10 +101,9 @@ public class EMFRenderer {
      * resizing the emf to propper device bounds.
      */
     private AffineTransform  mapModeTransform =
-        //DIA21 AffineTransform.getScaleInstance(TWIP_SCALE, TWIP_SCALE);
     		AffineTransform.getScaleInstance(1.0f, 1.0f);
 
-    private int mapMode = EMFConstants.MM_ISOTROPIC; //DIA21EMFConstants.MM_TEXT; //DIA14 MM_ISOTROPIC;
+    private int mapMode = EMFConstants.MM_ISOTROPIC; 
 
     /**
      * clipping area which is the base for all rendering
@@ -255,7 +254,6 @@ public class EMFRenderer {
         Tag tag;
         
         while ((tag = is.readTag()) != null) {
-        	System.out.println("***--***" + i++);
             tags.add(tag);
         }
         is.close();
@@ -267,22 +265,11 @@ public class EMFRenderer {
      * @return the size.
      */
     public Dimension getSize() {
-        //DIA10    	
-    	//DIAZ3 return header.getBounds().getSize();
     	Dimension d = header.getBounds().getSize();    	
     	if ((initialTransform != null) && (viewportSize == null) && (windowSize == null)) 
     	d.setSize(d.getWidth()-initialTransform.getTranslateX(), 
     			 d.getHeight()-initialTransform.getTranslateY());
-    	return d;
-    	
-    	//return header.getFrame().getSize();
-    	//return new Dimension((int)(bounds.width), (int)(bounds.height));
-        // TODO see the mapModePart of resetTransformation()
-        // if uncommented size is too small
-        /* Dimension bounds = header.getBounds().getSize();
-            return new Dimension(
-            (int)Math.ceil(bounds.width * TWIP_SCALE),
-            (int)Math.ceil(bounds.height * TWIP_SCALE));*/
+    	return d;    	
     }        
 
     public void setInitialTransform(AffineTransform at) {
@@ -355,11 +342,11 @@ public class EMFRenderer {
         for (int i = 0; i < tags.size(); i++) {
             tag = tags.get(i);     
             if (tag instanceof EMFTag) {
-            	System.out.println(i + "-" + tags.get(i).getName() + "!!!!!!!!!!!!");
                 ((EMFTag) tags.get(i)).render(this);
-            } else {
+            }
+            /*else {
                 logger.warning("unknown tag: " + tag);
-            }    
+            } */   
         }
         
         g2.getClipBounds();
@@ -562,7 +549,6 @@ public class EMFRenderer {
             	minX =s.getBounds().getX();            
             if (s.getBounds().getY() < minY)
                	minY =s.getBounds().getY();
-         System.out.println("LL" + minX + "." + minY);
         }
     }
 
@@ -586,129 +572,15 @@ public class EMFRenderer {
      * @param x x-Position
      * @param y y-Position
      */
-   /* public void drawOrAppendText(String text, double x, double y) {
-        // TODO: Use explicit widths to pixel-position each character, if present.
-        // TODO: Implement alignment properly.  What we have already seems to work well enough.
-        //            FontRenderContext frc = g2.getFontRenderContext();
-        //            TextLayout layout = new TextLayout(str, g2.getFont(), frc);
-        //            if ((textAlignMode & EMFConstants.TA_CENTER) != 0) {
-        //                layout.draw(g2, x + (width - textWidth) / 2, y);
-        //            } else if ((textAlignMode & EMFConstants.TA_RIGHT) != 0) {
-        //                layout.draw(g2, x + width - textWidth, y);
-        //            } else {
-        //                layout.draw(g2, x, y);
-        //            }
-
-        if (path != null) {
-            // do not use g2.drawString(str, x, y) to be aware of path
-            TextLayout tl = new TextLayout(
-                text,
-                g2.getFont(),
-                g2.getFontRenderContext());
-            path.append(tl.getOutline(null), false);
-        } else {
-            g2.setPaint(textColor);
-            g2.setTransform(g2.getTransform());
-            g2.drawString(text, (int)x, (int)y);
-        }
-    }*/
-    
-  /*  public void drawOrAppendText(String text, double x, double y,   int mode,
-            float xScale,
-            float yScale, Rectangle bounds) {
-        // TODO: Use explicit widths to pixel-position each character, if present.
-        // TODO: Implement alignment properly.  What we have already seems to work well enough.
-   /*                 FontRenderContext frc = g2.getFontRenderContext();
-                    TextLayout layout = new TextLayout(text, g2.getFont(), frc);
-                    double textWidth = layout.getBounds().getWidth();
-                    if ((textAlignMode & EMFConstants.TA_CENTER) != 0) {
-                        layout.draw(g2, (float) ((float) x + (bounds.getWidth() - textWidth) / 2), (float) y);
-                    } else if ((textAlignMode & EMFConstants.TA_RIGHT) != 0) {
-                        layout.draw(g2, (float) ((float)  x + bounds.getWidth() - textWidth), (float) y);
-                    } else {
-                        layout.draw(g2, (float) x, (float) y);
-                    }
-*/
-  /*      if (path != null) {
-            // do not use g2.drawString(str, x, y) to be aware of path
-            TextLayout tl = new TextLayout(
-                text,
-                g2.getFont(),
-                g2.getFontRenderContext());
-            path.append(tl.getOutline(null), false);
-        } else {
-        	
-        	Color oldcol = g2.getColor();
-    		g2.setColor(textColor);
-    		
-        	if (mode == EMFConstants.GM_COMPATIBLE)
-        	{
-        		g2.setPaint(textColor);
-        		
-        		
-                /*AffineTransform oldat = g2.getTransform();
-                AffineTransform at = new AffineTransform();
-                at.setToTranslation(bounds.getX(), bounds.getY());
-                at.setToScale(1/xScale, 1/yScale);
-                int xinit = (int)((bounds.getX()+x));
-                int yinit = (int)((bounds.getY()+y));
-                g2.setTransform(at);*/                     
-     //           g2.drawString(text, (int)x,(int) y);
-                //g2.setTransform(oldat);            
-                
-       /* 	}
-        	else if (mode == EMFConstants.GM_ADVANCED)
-        	{
-        	/*DIA13	AffineTransform at =g2.getTransform();
-        		float p = (float) (Math.abs(at.getTranslateX() - bounds.getX())/bounds.getX());
-        		float q = (float) (Math.abs(at.getTranslateY() - bounds.getY())/bounds.getY());
-
-      		  	g2.setPaint(textColor);
-        		if ((p > 0.20) || (q > 0.20))
-          		  g2.drawString(text, (int)bounds.getX()+(int)x, (int)bounds.getY()+(int)y);
-        		else*/
-        		// DIA18
-        /*		if (x < bounds.getX() && y < bounds.getY())
-        			//g2.drawString(text, (int)bounds.getX()+(int)x, (int)bounds.getY()+(int)y);
-        			g2.drawString(text, (int)bounds.getX(), (int)bounds.getY());
-        		else
-        			g2.drawString(text, (int)x, (int)y);
-        		
-        		
-
-        		  //g2.drawString(text, (int)bounds.getX()+(int)x, (int)bounds.getY()+(int)y);
-        	}         
-            //g2.setColor(oldcol);
-        }        
-    }*/
-
-
     public void drawOrAppendText(String text, double x, double y,   int mode,
     		float xScale,
     		float yScale, Rectangle bounds) {
-
-    	/*	FontRenderContext frc = g2.getFontRenderContext();
-        TextLayout layout = new TextLayout(text, g2.getFont(), frc);
-        double textWidth = layout.getBounds().getWidth();
-        if ((textAlignMode & EMFConstants.TA_CENTER) != 0) {
-            layout.draw(g2, (float) ((float) x + (bounds.getWidth() - textWidth) / 2), (float) y);
-        } else if ((textAlignMode & EMFConstants.TA_RIGHT) != 0) {
-            layout.draw(g2, (float) ((float)  x + bounds.getWidth() - textWidth), (float) y);
-        } else {
-            layout.draw(g2, (float) x, (float) y);
-        }*/
     	
     	if ((text == null) || text.equals(""))
     		return;
     	if (text.equals("191.5"))
     		System.out.print("");
-    	
-    	/*Font font = g2.getFont();
-    	int alfa = (int) ((bounds.getHeight() - originalFontSize)/1.3);
-    	g2.setFont(new Font(font.getName(), font.getStyle(), (int)(bounds.getHeight()-alfa)));
-    	*/
-    	//g2.setFont(new Font(font.getName(), font.getStyle(), (int)(originalFontSize*1.5)));
-		
+    			
     	y -= 0.125 * g2.getFont().getSize();
     	if (path != null) {
     		// do not use g2.drawString(str, x, y) to be aware of path
@@ -747,29 +619,19 @@ public class EMFRenderer {
     			{
     				g2.setPaint(textColor);
 
-    				//g2.drawString(text, (int)x,(int) y);
     				FontRenderContext frc = g2.getFontRenderContext();    				
     				TextLayout layout = new TextLayout(text, g2.getFont(), frc);    				
     				double textWidth = layout.getBounds().getWidth();    				
     				if ((textAlignMode & EMFConstants.TA_CENTER) != 0) {
     					g2.drawString(text, (float) ((float) x + (bounds.getWidth() - textWidth) / 2), (float) y);
-    					//layout.draw(g2, (float) ((float) x + (bounds.getWidth() - textWidth) / 2), (float) y);
     				} else if ((textAlignMode & EMFConstants.TA_RIGHT) != 0) {
     					g2.drawString(text, (float) ((float)  x + bounds.getWidth() - textWidth), (float) y);
-    					//layout.draw(g2, (float) ((float)  x + bounds.getWidth() - textWidth), (float) y);
     				} else if ((textAlignMode & EMFConstants.TA_BASELINE) != 0) {                        
     					g2.drawString(text, (int) x, (int) y);
-    				} else if (textAlignMode == 0) {					
-/*    					int oldsize = g2.getFont().getSize();
-    					float newsize = (float) (((float) g2.getFont().getSize()) * (float) (bounds.getWidth()/textWidth));   					
-    					g2.setFont(g2.getFont().deriveFont(newsize));
-  */					
-    					
+    				} else if (textAlignMode == 0) {					    					
     					g2.drawString(text, (int) x, (int) y+(int)(g2.getFont().getSize()*1.25));    					
-    				//	g2.setFont(g2.getFont().deriveFont(oldsize));
     				}    					
     				else
-    					//g2.drawString(text, (int) x-(int)bounds.getWidth()/2, (int) y+(int)bounds.getHeight());
     					g2.drawString(text, (int) x-(int)bounds.getWidth()/2, (int) y+(int)g2.getFont().getSize());
 
 
@@ -784,18 +646,12 @@ public class EMFRenderer {
     				double textWidth = layout.getBounds().getWidth();
     				if ((textAlignMode & EMFConstants.TA_CENTER) != 0) {
     					g2.drawString(text, (float) ((float) x + (bounds.getWidth() - textWidth) / 2), (float) y);
-    					//layout.draw(g2, (float) ((float) x + (bounds.getWidth() - textWidth) / 2), (float) y);
     				} else if ((textAlignMode & EMFConstants.TA_RIGHT) != 0) {
     					g2.drawString(text, (float) ((float)  x + bounds.getWidth() - textWidth), (float) y);
-    					//layout.draw(g2, (float) ((float)  x + bounds.getWidth() - textWidth), (float) y);
     				} else if ((textAlignMode & EMFConstants.TA_BASELINE) != 0) {                        
     					g2.drawString(text, (int) x, (int) y);
     				} else
     					g2.drawString(text, (int) x, (int) y);
-    				//layout.draw(g2,  (int) x,  (int)y);
-
-
-
     			}         
     		}
     	}        
@@ -823,13 +679,7 @@ public class EMFRenderer {
                 g2.getFontRenderContext());
             path.append(tl.getOutline(null), false);
         } else {
-            g2.setPaint(textColor);            
-            /*AffineTransform at = new AffineTransform();
-            at.setToTranslation(bounds.getX(), bounds.getY());
-            at.setToScale(1.0, 1.0);
-            g2.setTransform(at);*/
-            //g2.drawString(text, (int)x, (int)y);            
-            //DIA9 Esto me lo invente. Parece que no va g2.drawString(text, (int)bounds.getX()+(int)x, (int)bounds.getY()+(int)y);
+            g2.setPaint(textColor);                    
             g2.drawString(text, (int)bounds.getX()+(int)x, (int)bounds.getY()+(int)y);
         }
     }
@@ -955,7 +805,6 @@ public class EMFRenderer {
     	
     	//g2.setFont(new Font(font.getName(), font.getStyle(), (int)(font.getSize()*1.5)));
     	
-        //DIAZ 3
     	g2.setFont(font);
     	originalFontSize = font.getSize();
         
@@ -966,8 +815,7 @@ public class EMFRenderer {
     }
 
     public void transform(AffineTransform transform) {
-        g2.transform(transform);
-        //DIA25 g2.setTransform(transform);      
+        g2.transform(transform);     
     }
 
     public void resetTransformation() {
@@ -980,7 +828,6 @@ public class EMFRenderer {
     
     public void setTranslate(AffineTransform at) {
         AffineTransform old = g2.getTransform();
-        System.out.println("# " +old.getScaleX() +" "+old.getScaleY());
         at.scale(old.getScaleX(), old.getScaleY());
     	g2.setTransform(at);
     }
@@ -1114,22 +961,11 @@ public class EMFRenderer {
     public void setViewportSize(Dimension viewportSize) {
         this.viewportSize = viewportSize;
         fixViewportSize();        
-    	/*((SVGGraphics2D) g2).setSVGCanvasSize(new Dimension((int) (viewportSize.getWidth()),
-    				 (int) (viewportSize.getHeight())));
-        */
-        
-        //DIA21 comm resetTransformation();
-        //resetTransformation();
     }
 
     public void setWindowSize(Dimension windowSize) {
         this.windowSize = windowSize;
         fixViewportSize();
-     	/*((SVGGraphics2D) g2).setSVGCanvasSize(new Dimension((int) (windowSize.getWidth()),
-				 (int) (windowSize.getHeight())));*/
-        //DIA21 comm resetTransformation();
-        //resetTransformation();
-
     }
 
     public GDIObject getGDIObject(int index) {

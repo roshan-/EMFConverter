@@ -32,13 +32,10 @@ public class TextW extends Text {
        
         long leidos = totallen - emf.getLength();
         
-        //sOffset = (int) (sOffset -28 - leidos);
         sOffset -= (int) (emf.getTagHeader().getLength() - emf.getLength());
         
         long pInitStrBuffer = emf.getLength();
-   //     emf.readBYTE(sOffset);               
         String string = new String(emf.readBYTE(2 * sLen), "UTF-16LE");
-        System.out.println("====" + sLen);
         
         int ad = sOffset;
         if ((2 * sLen+ad) % 4 != 0)
@@ -49,11 +46,7 @@ public class TextW extends Text {
         if (emf.getLength() > 0)
         {
             cOffset -= (int) (emf.getTagHeader().getLength() - emf.getLength());
-//        	emf.readBYTE(cOffset);
-
-        	// ÑAPA
         	for (int i = 0; i < sLen; i++)
-  //      		if (emf.getLength() >= 4)
         		widths[i] = emf.readDWORD();
         	
         	emf.popBuffer();

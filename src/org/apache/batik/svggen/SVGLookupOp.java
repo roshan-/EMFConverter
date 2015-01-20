@@ -291,11 +291,7 @@ public class SVGLookupOp extends AbstractSVGFilterConverter {
         String[] lookupTables = new String[nComponents];
         for(int i=0; i<nComponents; i++)
             lookupTables[i] = lookupTableBuf[i].toString().trim();
-
-        /*for(int i=0; i<lookupTables.length; i++){
-            System.out.println(lookupTables[i]);
-            }*/
-
+  
         return lookupTables;
     }
 }

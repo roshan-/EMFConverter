@@ -3,10 +3,10 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
-	<classpathentry kind="lib" path="C:/64bin/lib/xmlgraphics-commons-2.0/build/xmlgraphics-commons-2.0.jar"/>
 	<classpathentry kind="lib" path="lib/js.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis-ext.jar"/>
 	<classpathentry kind="lib" path="lib/freehep-graphics2d-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/xalan-2.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/xmlgraphics-commons-2.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

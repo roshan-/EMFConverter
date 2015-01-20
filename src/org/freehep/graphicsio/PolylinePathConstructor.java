@@ -36,7 +36,6 @@ public abstract class PolylinePathConstructor extends
     }
 
     public void line(double x, double y) throws IOException {
-        // System.out.println("Line "+x+" "+y);
         polyline.add(new Point2D.Double(x, y));
         super.line(x, y);
     }

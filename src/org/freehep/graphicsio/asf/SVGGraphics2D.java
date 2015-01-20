@@ -581,25 +581,13 @@ public class SVGGraphics2D extends AbstractGraphics2D
 
                 svgRoot.setAttributeNS(XMLNS_NAMESPACE_URI,
                                        XMLNS_PREFIX + ":" + XLINK_PREFIX,
-                                       XLINK_NAMESPACE_URI);
-                
-                //DIA4                 
-/*                String str = "[" + this.getTransform().getTranslateX() + "," +
-                					this.getTransform().getTranslateY() + "," +
-                				this.getSVGCanvasSize().getWidth() +"," +
-                				this.getSVGCanvasSize().getHeight()+ "]";
-*/
-                
+                                       XLINK_NAMESPACE_URI);                                            
                
                 String str = "0 0 " +
                 				this.getSVGCanvasSize().getWidth() +" " +
                 				this.getSVGCanvasSize().getHeight();
                 svgRoot.setAttributeNS(null, SVGConstants.SVG_VIEW_BOX_ATTRIBUTE, str);
-               
-                //DIA21
-                //svgRoot.setAttribute("translateAll", this.getSVGCanvasSize().getWidth() /scaleX + "," + this.getSVGCanvasSize().getWidth()/scaleY);
-                //svgRoot.setAttribute("translateAll", -this.getTransform().getTranslateX() /scaleX + "," + -this.getTransform().getTranslateY()/scaleY);
-                
+                               
                 DocumentFragment svgDocument =
                     svgRoot.getOwnerDocument().createDocumentFragment();
                 svgDocument.appendChild(svgRoot);

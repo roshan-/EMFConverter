@@ -40,7 +40,7 @@ public class EMFConverter {
      *        is used with the extension type
      * @throws FileNotFoundException 
      */
-    protected static void export(String type, String srcFileName, String destFileName) throws FileNotFoundException {
+    public static void export(String type, String srcFileName, String destFileName) throws FileNotFoundException {
     	export (type, new BufferedInputStream(new FileInputStream(srcFileName)), destFileName);
     }
     

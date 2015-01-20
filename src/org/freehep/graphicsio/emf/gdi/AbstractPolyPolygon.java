@@ -106,27 +106,7 @@ public abstract class AbstractPolyPolygon extends EMFTag {
             }            
             path.append(gp, false);            
         }
-        
-        
-      /*DIA25/*/
-        
-    /*     AffineTransform at = new AffineTransform ();
-        
-        double h = bounds.getHeight();
-        double w = bounds.getWidth();
-        
-       // at.translate(bounds.getX(), bounds.getY());
-        //renderer.setTranslate(at);
-        
-        double scaleX = path.getBounds2D().getWidth()/w;
-        double scaleY = path.getBounds2D().getHeight()/h;
-        at.scale(scaleX, scaleY);
-        renderer.setTransform(at);
-        
-        // draw the complete path
-         System.out.println("MMX: " + path.getBounds2D().getMinX() + " MMY: " + path.getBounds2D().getMinY());
-         System.out.println("MMX: " + path.getBounds2D().getMaxX() + " MMY: " + path.getBounds2D().getMaxY());
-         */
+                   
         if (closePath) {
             renderer.fillAndDrawOrAppend(path);
         } else {

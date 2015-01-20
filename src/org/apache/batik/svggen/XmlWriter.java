@@ -373,56 +373,16 @@ public class XmlWriter implements SVGConstants {
                                  boolean escaped)
         throws IOException, SVGGraphics2DIOException {
         out.write (TAG_START, 0, 1);    // "<"
-        out.write (element.getTagName());
-        
-        //DIA18
-        /*if ((element.getTagName().equals("g")) && (primeraG == true))
-        {
-        	        	
-        	primeraG = false;
-        	out.write(" transform=\"translate(" + despX + "," + despY + ")\"");
-        }
-        if (element.getTagName().equals("svg")) 
-        {
-        	primeraG = true;
-        	/*vb = element.getAttributeNS(null,SVGConstants.SVG_VIEW_BOX_ATTRIBUTE);        	
-        	String vals[] =vb.substring(1, vb.length()).split(",");
-        	*/
-        	
-        	
-        /*	vb = element.getAttribute("translateAll");
-        	if (vb != null)
-        	{
-        		String vals[] =vb.substring(1, vb.length()).split(",");
-        		despX = Float.parseFloat(vals[0]);
-        		despY = Float.parseFloat(vals[1]);            	
-        	}
-        	
-        }*/
-        //out.write (EOL); //FIXME ASF
+        out.write (element.getTagName());              
         
         String txt = element.getAttributeNS(null, SVG_TRANSFORM_ATTRIBUTE);
-  //      System.out.println("TTTT" + txt);
-      //  out.write(' ' + "transform=\"" +txt + "\"");
         NamedNodeMap attributes = element.getAttributes();
         if (attributes != null){
             int nAttr = attributes.getLength();
             for(int i=0; i<nAttr; i++){
                 Attr attr = (Attr)attributes.item(i);
                 out.write(' ');
-          //      System.out.println("*********" + element.getTagName() + " " + attr.getName() + " " + attr.getValue());
-                
-         /*       if (element.getTagName().equals("image") && (attr.getName().equals("style")))
-                	System.out.println("PILLADO");
-                else if (element.getTagName().equals("path") && (attr.getName().equals("stroke")))
-                	System.out.println("CARGATELO");
-                else*/
-                	writeXml(attr, out, escaped);
-                
-            	
-/*                if (i != nAttr)
-                	out.write (EOL); //FIXME ASF
-                	*/
+                writeXml(attr, out, escaped);                            	
             }
         }
 

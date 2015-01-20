@@ -73,13 +73,9 @@ public class EMFImageLoader {
 			
 			
 			// TODO: this is highly experimental and does
-			// not work for the tested examples
-			/*int strangeOffset = width % 8;
-			if (strangeOffset != 0) {
-				strangeOffset = 8 - strangeOffset;
-			}-*/
-			
-			int strangeOffset = (int) Math.ceil((double)width/32.0)*32-width;
+			// not work for the tested examples			
+					
+			int strangeOffset = (int) Math.floor((double)(width+31)/32.0)*8-width;
 						
 
 			// iterator for pixel data
@@ -360,7 +356,6 @@ public class EMFImageLoader {
                         	else
                         		pblue = data[off];
 
-                        //System.out.println(xpos + " " + x + " " + alfa);
                         	if (offset_necesario < 100)
                         		result.setRGB(x, y, new Color(
                                         pblue,

@@ -33,10 +33,8 @@ public abstract class EMFTag extends Tag implements GDIObject {
     }
 
     public Tag read(int tagID, TaggedInputStream input, int len)
-            throws IOException {
-//    	System.out.println(tagID);    	
+            throws IOException {   	
     	EMFTag et = read(tagID, (EMFInputStream) input, len);
-    	System.out.println("------------->" + et.toString());
         return et;
     }
 

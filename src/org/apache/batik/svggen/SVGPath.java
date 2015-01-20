@@ -125,7 +125,6 @@ public class SVGPath extends SVGGraphicObjectConverter {
         } // while !isDone
 
         if (d.length() > 0){
-        	//System.out.println("++++" +d.toString().trim());
             return d.toString().trim();
         }
         else {
