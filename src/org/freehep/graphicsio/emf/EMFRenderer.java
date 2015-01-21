@@ -598,7 +598,12 @@ public class EMFRenderer {
     		{
     			FontRenderContext frc = g2.getFontRenderContext();
 				TextLayout layout = new TextLayout(text, g2.getFont(), frc);
-				double textWidth = layout.getBounds().getWidth();
+				double textWidth = 0;
+				try {
+					textWidth = layout.getBounds().getWidth();
+				} catch (ArrayIndexOutOfBoundsException a) {
+					System.out.println("Ugly hack to get around Java 1.6 Bug in java.awt.font.TextLayout");
+				}
     			if ((textAlignMode & EMFConstants.TA_CENTER) != 0) {    				
 					g2.drawString(text, (float) ((float) x + (bounds.getWidth() - textWidth) / 2), (float) y);
 					//layout.draw(g2, (float) ((float) x + (bounds.getWidth() - textWidth) / 2), (float) y);
